@@ -1,0 +1,6 @@
+/.agent-shell/
+__pycache__
+notes.org
+*~
+.projectile
+.env
