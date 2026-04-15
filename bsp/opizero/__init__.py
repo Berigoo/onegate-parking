@@ -1,30 +1,29 @@
+from ..interface import BSPInterface
 from . import gpio
 
-def bsp_init():
-    gpio.init_gpio()
+class BSPOpiZero(BSPInterface):
+    def bsp_init(self):
+        gpio.init_gpio()
         
-def bsp_read_vld_in():
-    return gpio.read_vld_in()
-    
-def bsp_read_vld_out():         # not used
-    return gpio.read_vld_out()
+    def bsp_read_vld_in(self):
+        return gpio.read_vld_in()
 
-def bsp_on_vld_in_high(cb):
-    gpio.on_vld_in_high(cb)
+    def bsp_on_vld_in_high(self, cb):
+        gpio.on_vld_in_high(cb)
 
-def bsp_on_vld_in_low(cb):
-    gpio.on_vld_in_low(cb)
+    def bsp_on_vld_in_low(self, cb):
+        gpio.on_vld_in_low(cb)
 
-def bsp_on_vld_out_high(cb):    # not used
-    gpio.on_vld_out_high(cb)        
+    def bsp_read_intercom_relay(self):
+        return gpio.read_intercom_relay1()
 
-def bsp_read_intercom_relay():
-    return gpio.read_intercom_relay1()
+    def bsp_on_intercom_relay_high(self, cb):
+        gpio.on_intercom_relay_high(cb)
 
-def bsp_write_boom_gate(state):
-    gpio.write_boom_gate(state)
+    def bsp_write_boom_gate(self, state):
+        gpio.write_boom_gate(state)
 
-def bsp_write_boom_gate_hold():
-    gpio.write_boom_gate_hold()
+    def bsp_write_boom_gate_hold(self):
+        gpio.write_boom_gate_hold()
 
 
