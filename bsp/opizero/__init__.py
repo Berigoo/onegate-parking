@@ -6,13 +6,16 @@ def bsp_init():
 def bsp_read_vld_in():
     return gpio.read_vld_in()
     
-def bsp_read_vld_out():
+def bsp_read_vld_out():         # not used
     return gpio.read_vld_out()
 
 def bsp_on_vld_in_high(cb):
     gpio.on_vld_in_high(cb)
 
-def bsp_on_vld_out_high(cb):
+def bsp_on_vld_in_low(cb):
+    gpio.on_vld_in_low(cb)
+
+def bsp_on_vld_out_high(cb):    # not used
     gpio.on_vld_out_high(cb)        
 
 def bsp_read_intercom_relay():

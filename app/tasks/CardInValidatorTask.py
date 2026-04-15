@@ -56,7 +56,7 @@ class CardValidatorIn:
                     )
                     self.queue.put(event)
             except Exception as e:
-                self.logger.warning("Kartu tidak valid atau sistem gagal", e)
+                self.logger.warning("Card invalid or system broke", e)
 
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:

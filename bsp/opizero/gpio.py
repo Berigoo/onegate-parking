@@ -1,7 +1,7 @@
 from . import config
 import gpiozero 
 
-_VLD_IN = None
+_VLD_IN  = None
 _VLD_OUT = None
 _INTERCOM_RELAY1 = None
 _BOOM_GATE_HIGH = None
@@ -42,6 +42,9 @@ def write_boom_gate_hold():
 
 def on_vld_in_high(cb): # execute 'cb' when in vld is HIGH 
     _VLD_IN.when_activated = cb
+    
+def on_vld_in_low(cb):
+    _VLD_IN.when_deactivated = cb
 
 def on_vld_out_high(cb): # execute 'cb' when out vld is HIGH 
     _VLD_OUT.when_activated = cb

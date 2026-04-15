@@ -6,7 +6,7 @@ from app.core import SessionQueue, Logger
 
 CARD_DATA_LEN=21
 
-class CardValidatorIn:
+class CardValidatorOut:
     def __init__(self, port, db, queue_to_push: SessionQueue):
         self.port = port
         self.db = db
