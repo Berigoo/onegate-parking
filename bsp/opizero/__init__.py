@@ -1,28 +1,27 @@
 from . import gpio
 
-class BSP:
-    def __init__(self):
-        gpio.init_gpio()
+def bsp_init():
+    gpio.init_gpio()
         
-    def read_vld_in(self):
-        return gpio.read_vld_in()
+def bsp_read_vld_in():
+    return gpio.read_vld_in()
     
-    def read_vld_out(self):
-        return gpio.read_vld_out()
+def bsp_read_vld_out():
+    return gpio.read_vld_out()
 
-    def read_intercom_relay(self):
-        return gpio.read_intercom_relay1()
+def bsp_on_vld_in_high(cb):
+    gpio.on_vld_in_high(cb)
 
-    def write_boom_gate(self, state):
-        gpio.write_boom_gate(state)
+def bsp_on_vld_out_high(cb):
+    gpio.on_vld_out_high(cb)        
 
-    def on_vld_in_high(self, cb):
-        gpio.on_vld_in_high(cb)
+def bsp_read_intercom_relay():
+    return gpio.read_intercom_relay1()
 
-    def on_vld_out_high(self, cb):
-        gpio.on_vld_out_high(cb)        
+def bsp_write_boom_gate(state):
+    gpio.write_boom_gate(state)
 
-    def stream_rtsp(self, source):
-        # TODO 
-        pass
-            
+def bsp_write_boom_gate_hold():
+    gpio.write_boom_gate_hold()
+
+
