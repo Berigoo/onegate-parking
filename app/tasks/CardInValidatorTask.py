@@ -40,6 +40,7 @@ class CardValidatorIn:
         if self.serial is None:
             self.serial_reconnect()
         if self.serial.in_waiting > 0:
+            
             raw_data = self.serial.readline()
             try:
                 if raw_data:
