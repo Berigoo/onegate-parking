@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from app.domain import EventType
 import time
 
 @dataclass

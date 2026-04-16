@@ -2,6 +2,7 @@ import cv2
 from app.tasks import VLDMonitor, CardValidatorIn, CardValidatorOut, IntercomRelayMonitor, CameraMonitor, GateController, TimerManager
 from app.core import SessionQueue, SystemStateContext
 from app.states import Idle
+from bsp import bsp
 
 class Application:
     def __init__(self):
@@ -16,6 +17,8 @@ class Application:
         self.session_queue = None
         self.current_state = None
         self.ctx = None
+
+        bsp.bsp_init()
         
     def __setup(self):
         # Initialization
