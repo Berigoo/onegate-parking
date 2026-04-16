@@ -1,0 +1,6 @@
+gpiozero==2.0.1
+opencv-python==4.13.0.92
+pyserial==3.5
+pytest==9.0.3
+python-dotenv==1.2.2
+setuptools==82.0.1
