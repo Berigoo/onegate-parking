@@ -15,7 +15,7 @@ class TimerManager:
     #################### threading methods
     def start(self, timeout, payload):
         self.stop()
-        self.timer = threading.Timer(self.timeout, self._timeout)
+        self.timer = threading.Timer(timeout, self._timeout)
         self.running = True
         self.payload = payload
         self.timer.start()

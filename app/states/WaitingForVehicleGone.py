@@ -1,12 +1,12 @@
-from app.core import State
+from app.core import SystemState
 from app.domain import EventType
 from app.states import Idle, ClosingGate
 
 STATE_TIMEOUT = 60              # back to IDLE
 
-class WaitingForVehicleGone(State):
-    def __init__(self):
-        self.context.timer_mgr.start(STATE_TIMEOUT, self.__name__)
+class WaitingForVehicleGone(SystemState):
+    def init(self):
+        self.context.timer_mgr.start(STATE_TIMEOUT, {"issuer": type(self).__name__})
         self.next_low_signal = True
         self.current_vld_state = self.context.vld_monitor.get_state()
 
@@ -18,12 +18,14 @@ class WaitingForVehicleGone(State):
         match ev:
             case EventType.VEHICLE_DETECTED:
                 self.next_low_signal = False
-            case EventType.VEHICLE_UNDETECTED:
+            case EventType.VEHICLE_GONE:
+                print('gone')
                 if not self.next_low_signal:
-                    self.context.timer_mgr.cancel()
-                    self.context.set_state(ClosingGate())
+                    self.context.timer_mgr.stop()
+                    self.context.set_state("ClosingGate")
             case EventType.GENERIC_TIMEOUT:
-                self.context.set_state(ClosingGate())
+                print('timeout')
+                self.context.set_state("ClosingGate")
             
         
         

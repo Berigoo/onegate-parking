@@ -46,13 +46,13 @@ class GateController:
         bsp.bsp_write_boom_gate_hold()
         self.is_holding = True
         self.logger.debug("holding the gate")
-    def continue(self):
+    def cont(self):
         bsp.bsp_write_boom_gate(False)
         if self.is_holding and self.state is GateState.GATE_OPENING:
             self.open()
             self.is_holding = False
             self.state = GateState.GATE_OPENING
-        else is self.is_holding and self.state is GateState.GATE_CLOSING:
+        elif self.is_holding and self.state is GateState.GATE_CLOSING:
             self.close()
             self.is_holding = False
             self.state = GateState.GATE_CLOSING

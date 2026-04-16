@@ -22,7 +22,7 @@ class Application:
         self.session_queue = SessionQueue()
         self.vld_monitor = VLDMonitor(self.session_queue)
         self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", "/etc/onegate-parking/cards.db", self.session_queue)
-        self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db"self.session_queue)
+        self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db", self.session_queue)
         self.intercom_relay = IntercomRelayMonitor(self.session_queue)
         self.camera = CameraMonitor()
         self.gate_ctrl = GateController()
@@ -39,10 +39,10 @@ class Application:
         self.camera.stream_handle(self.__handle_video_stream)
 
         # Initialize state machine context
-        self.ctx = SystemStateContext(Idle(), vld_monitor,card_validator_in,card_validator_out,intercom_relay,camera,gate_ctrl,timer_mgr)
+        self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr)
         
     def __loop(self):
-        ev = queue.get()
+        ev = self.session_queue.get()
         self.ctx.do(ev)
 
     def __handle_video_stream(self, frame):
