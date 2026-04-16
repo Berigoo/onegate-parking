@@ -1,4 +1,4 @@
-from bsp import *
+from bsp import bsp
 import threading
 from app.core import SessionQueue, Logger
 from app.domain import StateEvent, EventType
@@ -29,11 +29,11 @@ class VLDMonitor:
 
     #################### Task Logic
     def get_state(self):
-        return bsp_read_vld_in()
+        return bsp.bsp_read_vld_in()
 
     def __setup(self):
-        bsp_on_vld_in_high(self.__when_vld_high)
-        bsp_on_vld_in_low(self.__when_vld_low)
+        bsp.bsp_on_vld_in_high(self.__when_vld_high)
+        bsp.bsp_on_vld_in_low(self.__when_vld_low)
         
     def __loop(self):
         pass

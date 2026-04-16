@@ -49,15 +49,14 @@ class TestVLDMonitorThreading:
 
 
 class TestVLDMonitorBasicFunctionalitites:
-    def test_get_state_delegated(self):
-        with patch('app.tasks.VLDMonitorTask.bsp_read_vld_in', return_value=True) as mock_bsp: # TODO too inclusive (bad for test)
+    @patch('app.tasks.VLDMonitorTask.bsp')
+    def test_get_state_delegated(self, mock):
             queue = SessionQueue()
             vldmonitor = VLDMonitor(queue)
-
-            mock_bsp.read_vld_in().return_value = True
+            mock.bsp_read_vld_in.return_value = True
 
             assert vldmonitor.get_state() is True
-            mock_bsp.read_vld_in.assert_called_once()
+            mock.bsp_read_vld_in.assert_called_once()
 
     def test_when_vld_high(self):
         queue = SessionQueue()
