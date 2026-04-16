@@ -1,5 +1,5 @@
 from . import config
-import gpiozero 
+import gpiozero
 
 _VLD_IN  = None
 _INTERCOM_RELAY1 = None

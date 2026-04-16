@@ -1,10 +1,12 @@
 import serial
 import threading
 import sqlite3
+import time
 from app.domain import StateEvent, EventType
 from app.core import SessionQueue, Logger
 
-CARD_DATA_LEN=21
+# Expected length of a card data payload (heuristic used by parser)
+CARD_DATA_LEN = 21
 
 class CardValidatorIn:
     def __init__(self, port, db, queue_to_push: SessionQueue):
@@ -35,47 +37,51 @@ class CardValidatorIn:
 
     #################### Task Logic
     def __setup(self):
+        # Attempt to connect to the serial device; keep self.serial in a valid state
         self.serial = self.__serial_connect(self.port)
     def __loop(self):
         if self.serial is None:
-            self.serial_reconnect()
-        if self.serial.in_waiting > 0:
-            
-            raw_data = self.serial.readline()
-            try:
+            self.serial = self.__serial_connect(self.port)
+            if self.serial is None:
+                time.sleep(0.1)
+                return
+        try:
+            if getattr(self.serial, 'in_waiting', 0) > 0:
+                raw_data = self.serial.readline()
                 if raw_data:
                     data = self.__parse(raw_data)
-                    is_valid = self.__validate(data)
-                    obj = {
-                        "uid": data["uid"],
-                        "number": data["number"],
-                        "is_valid": is_valid
-                    }
-                    event = StateEvent(
-                        type=EventType.CARD_IN_VALID,
-                        payload=obj
-                    )
-                    self.queue.put(event)
-            except Exception as e:
-                self.logger.warning("Card invalid or system broke", e)
+                    if data is not None:
+                        is_valid = self.__validate(data)
+                        obj = {
+                            "uid": data["uid"],
+                            "number": data["number"],
+                            "is_valid": is_valid
+                        }
+                        event = StateEvent(
+                            type=EventType.CARD_IN_VALID,
+                            payload=obj
+                        )
+                        self.queue.put(event)
+        except Exception as e:
+            self.logger.warning(f"Card invalid or system broke: {e}")
 
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:
             return None
         try:
-            data = raw_data[3:-1].hex() # assume first 3 bytes is a metadata, and last byte is a terminator
+            data = raw_data[3:-1].hex()  # assume first 3 bytes is a metadata, and last byte is a terminator
             card_types = data[:2]
             card_uid = data[2:2+14]
             card_val = data[16:16+2]
             card_num = data[18:18+16]
             balance = data[34:34+8]
             return {
-                "types":(card_types),
-                "uid":(card_uid),
-                "validity":(card_val),
-                "number":(card_num),
-                "balance":(balance),
-                "card_info":data
+                "types": (card_types),
+                "uid": (card_uid),
+                "validity": (card_val),
+                "number": (card_num),
+                "balance": (balance),
+                "card_info": data
             }
         except Exception as e:
             self.logger.debug(f"Parse error: {e}")
@@ -101,20 +107,28 @@ class CardValidatorIn:
 
             return result
         except Exception as e:
-            self.logger.error("Database error during validation", e)
+            self.logger.error(f"Database error during validation: {e}")
             return False
         
     def __serial_connect(self, port):
-        while self.serial is None:
+        retries = 5
+        while retries > 0:
             try:
-                self.serial = serial.Serial(
+                ser = serial.Serial(
                     port=port,
-                    baudrate=9600,        
+                    baudrate=9600,
                     parity=serial.PARITY_NONE,
                     stopbits=serial.STOPBITS_ONE,
-                    bytesize=serial.EIGHTBITS)
+                    bytesize=serial.EIGHTBITS,
+                    timeout=1,
+                )
+                return ser
             except serial.SerialException as e:
-                self.logger.warning("Failed to connect to serial. retyring...", e)
+                self.logger.warning(f"Failed to connect to serial. retrying...: {e}")
+                retries -= 1
+                time.sleep(0.2)
+        return None
+
     def __serial_reconnect(self):
-        self.__serial_connect(self.port)
+        self.serial = self.__serial_connect(self.port)
         ####################

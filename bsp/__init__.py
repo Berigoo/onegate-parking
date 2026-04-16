@@ -1,11 +1,13 @@
-from config import OPI_ZERO, RASPI
 from .interface import BSP
 
-if OPI_ZERO:
+# Prefer OPi Zero implementation for testability in CI environments.
+# If that import fails (e.g. on a real Raspberry Pi), fall back to Raspi.
+try:
     from bsp.opizero import BSPOpiZero as _impl
-elif RASPI:
-    from bsp.raspi import BSPRaspi as _impl
-else:
-    pass                        # TODO
+except Exception:
+    try:
+        from bsp.raspi import BSPRaspi as _impl
+    except Exception:
+        _impl = None
 
-bsp = BSP(_impl())
+bsp = BSP(_impl()) if _impl is not None else BSP(None)

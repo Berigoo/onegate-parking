@@ -37,7 +37,8 @@ class BSP:
     def bsp_on_vld_in_high(self, callback):
         self._impl.bsp_on_vld_in_high(callback)
     def bsp_on_vld_in_low(self, callback):
-        self._impl.bsp_on_vld_in_low(self, callback)
+        # Pass the callback directly to the underlying implementation
+        self._impl.bsp_on_vld_in_low(callback)
     def bsp_read_intercom_relay(self):
         return self._impl.bsp_read_intercom_relay()
     def bsp_on_intercom_relay_high(self, callback):
