@@ -1,5 +1,9 @@
+import os
+from dotenv import load_dotenv
 from app.main import Application
 
-if __name__ = "__main__":
+load_dotenv() 
+
+if __name__ == "__main__":
     application = Application()
     application.start()
