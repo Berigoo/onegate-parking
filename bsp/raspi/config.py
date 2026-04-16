@@ -1,0 +1,6 @@
+import os
+
+PIN_IN_VLD = os.getenv('PIN_VLD')
+PIN_IN_INTERCOM_RELAY1 = os.getenv('PIN_INTERCOM_RELAY')
+PIN_BOOM_GATE_HIGH = os.getenv('PIN_BOOM_GATE_HIGH')
+PIN_BOOM_GATE_LOW = os.getenv('PIN_BOOM_GATE_LOW')

@@ -9,3 +9,4 @@ except ImportError:
     pass
 
 OPI_ZERO = os.getenv('OPI_ZERO', 'false').lower() in ('true', '1', 'yes')
+RASPI = os.getenv('RASPI', 'false').lower() in ('true', '1', 'yes')
