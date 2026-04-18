@@ -5,6 +5,8 @@ from .ClosingGate import ClosingGate
 from .SerialDataProcessing import SerialDataProcessing
 from .WaitingForEmoneyTap import WaitingForEmoneyTap
 from .WaitingForVehicleGone import WaitingForVehicleGone
+from .AddingToQueue import AddingToQueue
+from .CheckingForQueue import CheckingForQueue
 
 STATE_MAP = {
     "Idle": Idle,
@@ -13,7 +15,9 @@ STATE_MAP = {
     "ClosingGate": ClosingGate,
     "SerialDataProcessing": SerialDataProcessing,
     "WaitingForEmoneyTap": WaitingForEmoneyTap,
-    "WaitingForVehicleGone": WaitingForVehicleGone
+    "WaitingForVehicleGone": WaitingForVehicleGone,
+    "AddingToQueue": AddingToQueue,
+    "CheckingForQueue": CheckingForQueue
 }
 
 __all__ = ['STATE_MAP']

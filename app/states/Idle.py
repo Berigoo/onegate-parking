@@ -1,9 +1,9 @@
-from app.core import SystemState
-from app.domain import EventType
+from app.core import SystemState, DM
+from app.domain import EventType, TextType
 
 class Idle(SystemState):
     def init(self):
-        pass
+        DM.set_text(TextType.WELCOME)
     def execute(self):
         ev = self.context.current_event.type
         match ev:

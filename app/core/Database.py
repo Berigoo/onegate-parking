@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-
 class CardDatabase:
     """SQLite database for card management"""
 

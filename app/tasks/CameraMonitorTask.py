@@ -15,6 +15,7 @@ class CameraMonitor:
         self.logger = Logger("Camera")
         self.cam = None
         self.cam_handle: Callable = None
+        self.generic_handle: Callable = None
 
     #################### threading methods
     def start(self):
@@ -36,8 +37,11 @@ class CameraMonitor:
     ####################
 
     #################### Task Logic
-    def stream_handle(self, callback: Callable):
+    def stream_handle(self, callback: Callable): # when frame is valid
         self.cam_handle = callback
+
+    def cam_connecting_handle(self, callback: Callable):
+        self.cam_connecting = callback
 
     def __connect(self):
         rtsp = f"rtsp://{os.getenv('CAM_USERNAME')}:{os.getenv('CAM_PASSWORD')}@{os.getenv('CAM_IP')}:{os.getenv('CAM_PORT')}/Streaming/Channels/101"
@@ -55,6 +59,8 @@ class CameraMonitor:
             self.logger.info('Reconnecting...')
             time.sleep(CAM_RETRY_DELAY)
             self.__connect()
+            if self.cam_handle is not None:
+                self.cam_connecting()
             return
 
         ret, frame = self.cam.read()
@@ -62,6 +68,9 @@ class CameraMonitor:
             self.logger.warning('Disconnnected!')
             self.cam.release()
             time.sleep(CAM_RETRY_DELAY)
+            self.__connect()
+            if self.cam_handle is not None:
+                self.cam_connecting()
             return
 
         if self.cam_handle is not None:

@@ -1,13 +1,14 @@
-from app.core import SystemState
+from app.core import SystemState, SessionQueue
 from app.domain import EventType
 from app.states import OpeningGate, HoldingGate
 
 STATE_TIMEOUT = 5               # back to idle
 
-class ClosingGate(SystemState):
+class ClosingGate(SystemState): # sessions queue is empty, guaranteed
     def init(self):
         self.context.timer_mgr.start(STATE_TIMEOUT, {"issuer": type(self).__name__})
         self.context.gate_ctrl.close()
+        self.context.sessions_queue = SessionQueue() # TODO proper cleaning
         
     def execute(self):
         ev = self.context.current_event.type
