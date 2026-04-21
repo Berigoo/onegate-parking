@@ -43,17 +43,18 @@ class DisplayManager:           # A singleton class
 
     def render(self, frame=None):
         canvas = self.__header()
-        
-        if frame is not None:
-            self.__camera_stream(canvas, frame)
-        else:
-            self.__camera_connecting(canvas)
 
-        self.__write_text(canvas)
-        
+        if frame is not None:
+            canvas = self.__camera_stream(canvas, frame)
+        else:
+            canvas = self.__camera_connecting(canvas)
+
+        canvas =  self.__write_text(canvas)
+
         cv2.imshow(WINDOW_NAME, canvas) # Render
 
     def __camera_stream(self, canvas, frame):
+        print("streamng")
         resized_cam = cv2.resize(frame, (CAM_W, CAM_H))
         canvas[CAM_Y:CAM_Y+CAM_H, CAM_X:CAM_X+CAM_W] = resized_cam
 
@@ -79,6 +80,7 @@ class DisplayManager:           # A singleton class
         cv2.putText(canvas, self.current_text, (text_x+3, text_y+3), FONT, 1.8, (0, 0, 0), 4)
         # Menulis Teks Utama
         cv2.putText(canvas, self.current_text, (text_x, text_y), FONT, 1.8, self.current_color, 3)
+        return canvas
             
     def __header(self):
         canvas = np.zeros((UI_HEIGHT, UI_WIDTH, 3), dtype=np.uint8)

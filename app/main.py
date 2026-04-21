@@ -1,8 +1,7 @@
 import cv2
-from app.tasks import VLDMonitor, CardValidatorIn, CardValidatorOut, IntercomRelayMonitor, CameraMonitor, GateController, TimerManager
+from app.tasks import VLDMonitor, CardValidatorIn, CardValidatorOut, IntercomRelayMonitor, CameraMonitor, GateController, TimerManager, DisplayWorker
 from app.core import SessionQueue, SystemStateContext
 from app.states import Idle
-from app.core import DisplayManager
 from bsp import bsp
 
 class Application:
@@ -13,6 +12,7 @@ class Application:
         self.card_validator_out = None
         self.intercom_relay = None
         self.camera = None
+        self.dw = None
         self.gate_ctrl = None
         self.timer_mgr = None
         self.events_queue = None
@@ -39,20 +39,22 @@ class Application:
         self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db", self.events_queue)
         self.intercom_relay = IntercomRelayMonitor(self.events_queue)
         self.camera = CameraMonitor()
+        self.dw = DisplayWorker()
         self.gate_ctrl = GateController()
         self.timer_mgr = TimerManager(self.events_queue)
-        self.dm = DisplayManager()
-
+        
         # Start monitor services
         self.vld_monitor.start()
         self.card_validator_in.start()
         self.card_validator_out.start()
         self.intercom_relay.start()
+        self.dw.start()
+        self.camera.stream_handle(dw.show)
         self.camera.start()
 
-        # Assign callback video frame
-        self.camera.stream_handle(self.__handle_video_stream)
-        self.camera.cam_connecting_handle(self.__handle_cam_connecting)
+        # # Assign callback video frame
+        # self.camera.stream_handle(self.__handle_video_stream)
+        # self.camera.cam_connecting_handle(self.__handle_cam_connecting)
 
         # Initialize state machine context
         self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr, self.sessions_queue, self.dm)
@@ -61,11 +63,21 @@ class Application:
         ev = self.events_queue.get()
         self.ctx.do(ev)
 
-    def __handle_video_stream(self, frame):
-        self.dm.render(frame)
+    # def __handle_video_stream(self, frame):
+    #     self.dm.render(frame)
 
-    def __handle_cam_connecting(self):
-        self.dm.render(None)
+    #     if cv2.waitKey(1) & 0xFF == ord('q'):
+    #         self.cam.release()
+    #         cv2.destroyAllWindows() # TODO gracefull exit
+    #         return
+
+    # def __handle_cam_connecting(self):
+    #     self.dm.render(None)
+
+    #     # if cv2.waitKey(1) & 0xFF == ord('q'):
+    #     #     self.cam.release()
+    #     #     cv2.destroyAllWindows() # TODO gracefull exit
+    #     #     return
         
     def start(self):
         self.is_running = True
