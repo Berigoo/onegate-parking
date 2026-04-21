@@ -49,7 +49,7 @@ class Application:
         self.dw = DisplayWorker()
         self.dw.start()
         self.camera = CameraMonitor()
-        self.camera.stream_handle(dw.show)
+        self.camera.stream_handle(self.dw.show)
         self.camera.start()
 
         # # Assign callback video frame
