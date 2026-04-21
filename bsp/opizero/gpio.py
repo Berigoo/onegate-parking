@@ -10,7 +10,7 @@ def init_gpio():
     global _VLD_IN, _INTERCOM_RELAY1, _BOOM_GATE_HIGH, _BOOM_GATE_LOW
     
     # input devices
-    _VLD_IN = gpiozero.DigitalInputDevice(config.PIN_IN_VLD, pull_up=False, bounce_time=2)
+    _VLD_IN = gpiozero.DigitalInputDevice(10, pull_up=False, bounce_time=2)
     _INTERCOM_RELAY1 = gpiozero.DigitalInputDevice(config.PIN_IN_INTERCOM_RELAY1, pull_up=False, bounce_time=2)
 
     # output device

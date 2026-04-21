@@ -26,13 +26,9 @@ class Application:
         # or non-RPi setups, this call may fail; swallow exceptions to keep
         # unit tests deterministic while still allowing mocked components
         # to be exercised.
-        try:
-            bsp.bsp_init()
-        except Exception:
-            pass
+        bsp.bsp_init()
         
     def __setup(self):
-        bsp.bsp_init()
         # Initialization
         self.events_queue = SessionQueue()
         # self.sessions_queue = SessionQueue() # may invalid
