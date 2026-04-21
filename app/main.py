@@ -33,7 +33,7 @@ class Application:
         
     def __setup(self):
         # Initialization
-        # self.events_queue = SessionQueue()
+        self.events_queue = SessionQueue()
         # self.sessions_queue = SessionQueue() # may invalid
         # self.vld_monitor = VLDMonitor(self.events_queue)
         # self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", "/etc/onegate-parking/cards.db", self.events_queue)
