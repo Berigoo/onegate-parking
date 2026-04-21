@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import StrEnum
 
-class TextType(Enum):
+class TextType(StrEnum):
     WELCOME = "SELAMAT DATANG"
     VEHICLE_DETECTED = "KENDARAAN TERDETEKSI"
     CARD_TAP_REQUEST = "SILAKAN TAP KARTU"

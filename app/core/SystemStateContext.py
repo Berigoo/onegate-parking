@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from app.domain import StateEvent
 from app.core import Logger
-from app.states import *
+from app.states import STATE_MAP
 import time
 import sys
 
 # the context class contains a _state that references the concrete state and setState method to change between states.
 class SystemStateContext:
-    def __init__(self, state, vld_monitor, card_validator_in, card_validator_out, intercom_relay, camera, gate_ctrl, timer_mgr, sessions_queue) -> None:
+    def __init__(self, state, vld_monitor, card_validator_in, card_validator_out, intercom_relay, camera, gate_ctrl, timer_mgr, sessions_queue, dm) -> None:
         self.vld_monitor = vld_monitor
         self.card_validator_in = card_validator_in
         self.card_validator_out = card_validator_out
@@ -16,6 +16,7 @@ class SystemStateContext:
         self.gate_ctrl = gate_ctrl
         self.timer_mgr = timer_mgr
         self.sessions_queue = sessions_queue
+        self.dm = dm
         self.logger = Logger("System State Context")
         self.currrent_event: StateEvent = None
 

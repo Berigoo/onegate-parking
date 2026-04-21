@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-from app.core import SystemState, DM
+from app.core import SystemState
 from app.domain import EventType, TextType
 
 ENTERED_USERS_DB = "entered_users.db"

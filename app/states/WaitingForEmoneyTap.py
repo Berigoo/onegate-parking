@@ -1,4 +1,4 @@
-from app.core import SystemState, DM
+from app.core import SystemState
 from app.domain import EventType, TextType
 from app.states import SerialDataProcessing, Idle, OpeningGate
 
@@ -6,7 +6,7 @@ STATE_TIMEOUT = 30              # back to IDLE
 
 class WaitingForEmoneyTap(SystemState):
     def init(self):
-        DM.set_text(TextType.CARD_TAP_REQUEST)
+        self.context.dm.set_text(TextType.CARD_TAP_REQUEST)
         self.context.timer_mgr.start(STATE_TIMEOUT, {"issuer": type(self).__name__})
         
     def execute(self):

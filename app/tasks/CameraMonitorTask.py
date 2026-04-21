@@ -57,20 +57,20 @@ class CameraMonitor:
     def __loop(self):
         if not self.cam.isOpened():
             self.logger.info('Reconnecting...')
+            if self.cam_connecting is not None:
+                self.cam_connecting()
             time.sleep(CAM_RETRY_DELAY)
             self.__connect()
-            if self.cam_handle is not None:
-                self.cam_connecting()
             return
 
         ret, frame = self.cam.read()
         if not ret:
             self.logger.warning('Disconnnected!')
+            if self.cam_connecting is not None:
+                self.cam_connecting()
             self.cam.release()
             time.sleep(CAM_RETRY_DELAY)
             self.__connect()
-            if self.cam_handle is not None:
-                self.cam_connecting()
             return
 
         if self.cam_handle is not None:

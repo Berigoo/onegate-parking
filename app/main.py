@@ -2,7 +2,7 @@ import cv2
 from app.tasks import VLDMonitor, CardValidatorIn, CardValidatorOut, IntercomRelayMonitor, CameraMonitor, GateController, TimerManager
 from app.core import SessionQueue, SystemStateContext
 from app.states import Idle
-from app.core import DM         # DisplayManager
+from app.core import DisplayManager
 from bsp import bsp
 
 class Application:
@@ -19,6 +19,7 @@ class Application:
         self.sessions_queue = None
         self.current_state = None
         self.ctx = None
+        self.dm = None
 
         # Initialize hardware interface if available. In test environments
         # or non-RPi setups, this call may fail; swallow exceptions to keep
@@ -40,6 +41,7 @@ class Application:
         self.camera = CameraMonitor()
         self.gate_ctrl = GateController()
         self.timer_mgr = TimerManager(self.events_queue)
+        self.dm = DisplayManager()
 
         # Start monitor services
         self.vld_monitor.start()
@@ -47,23 +49,23 @@ class Application:
         self.card_validator_out.start()
         self.intercom_relay.start()
         self.camera.start()
-ppn
+
         # Assign callback video frame
         self.camera.stream_handle(self.__handle_video_stream)
         self.camera.cam_connecting_handle(self.__handle_cam_connecting)
 
         # Initialize state machine context
-        self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr, self.sessions_queue)
+        self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr, self.sessions_queue, self.dm)
         
     def __loop(self):
         ev = self.events_queue.get()
         self.ctx.do(ev)
 
     def __handle_video_stream(self, frame):
-        DM.render(frame)
+        self.dm.render(frame)
 
     def __handle_cam_connecting(self):
-        DM.render(None)
+        self.dm.render(None)
         
     def start(self):
         self.is_running = True

@@ -1,4 +1,4 @@
-from app.core import SystemState, DM
+from app.core import SystemState
 from app.domain import EventType, TextType
 
 class AddingToQueue(SystemState):
