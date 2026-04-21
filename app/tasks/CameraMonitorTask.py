@@ -4,7 +4,7 @@ import time
 import threading
 import queue
 from typing import Callable
-from app.core import SessionQueue, Logger
+from app.core import SessionQueue, Logger, DisplayManager
 from app.domain import StateEvent, EventType
 
 CAM_RETRY_DELAY = 5
@@ -15,6 +15,7 @@ class DisplayWorker:
         self.frame_queue = queue.Queue(maxsize=1)
         self.running = False
         self.thread = None
+        self.dm = None
 
     def start(self):
         if self.running:
@@ -24,7 +25,8 @@ class DisplayWorker:
         self.thread.start()
 
     def _run(self):
-        cv2.namedWindow(self.window_name)
+        # cv2.namedWindow(self.window_name)
+        self.dm = DisplayManager() 
         while self.running:
             cv2.imshow(self.window_name, self.frame_queue.get())
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -33,7 +35,8 @@ class DisplayWorker:
 
     def show(self, frame):
         try:
-            self.frame_queue.put_nowait(frame)
+            canvas = self.dm.render(frame)
+            self.frame_queue.put_nowait(canvas)
         except queue.Full:
             pass
 

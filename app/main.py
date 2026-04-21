@@ -1,8 +1,9 @@
 import cv2
 from app.tasks import VLDMonitor, CardValidatorIn, CardValidatorOut, IntercomRelayMonitor, CameraMonitor, GateController, TimerManager, DisplayWorker
-from app.core import SessionQueue, SystemStateContext
+from app.core import SessionQueue, SystemStateContext, DisplayManager
 from app.states import Idle
 from bsp import bsp
+from app.domain import TextType
 
 class Application:
     def __init__(self):
@@ -37,20 +38,24 @@ class Application:
         # self.vld_monitor = VLDMonitor(self.events_queue)
         # self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", "/etc/onegate-parking/cards.db", self.events_queue)
         # self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db", self.events_queue)
-        # self.intercom_relay = IntercomRelayMonitor(self.events_queue)
+        self.intercom_relay = IntercomRelayMonitor(self.events_queue)
         # self.gate_ctrl = GateController()
         # self.timer_mgr = TimerManager(self.events_queue)
+        self.dm = DisplayManager()
         
         # Start monitor services
         # self.vld_monitor.start()
         # self.card_validator_in.start()
         # self.card_validator_out.start()
-        # self.intercom_relay.start()
+        self.intercom_relay.start()
+
+        # Camera workers and manager
         self.dw = DisplayWorker()
         self.dw.start()
         self.camera = CameraMonitor()
         self.camera.stream_handle(self.dw.show)
         self.camera.start()
+        self.dm.set_text(TextType.WELCOME)
 
         # # Assign callback video frame
         # self.camera.stream_handle(self.__handle_video_stream)
