@@ -32,23 +32,23 @@ class Application:
         
     def __setup(self):
         # Initialization
-        self.events_queue = SessionQueue()
-        self.sessions_queue = SessionQueue() # may invalid
-        self.vld_monitor = VLDMonitor(self.events_queue)
-        self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", "/etc/onegate-parking/cards.db", self.events_queue)
-        self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db", self.events_queue)
-        self.intercom_relay = IntercomRelayMonitor(self.events_queue)
-        self.camera = CameraMonitor()
-        self.dw = DisplayWorker()
-        self.gate_ctrl = GateController()
-        self.timer_mgr = TimerManager(self.events_queue)
+        # self.events_queue = SessionQueue()
+        # self.sessions_queue = SessionQueue() # may invalid
+        # self.vld_monitor = VLDMonitor(self.events_queue)
+        # self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", "/etc/onegate-parking/cards.db", self.events_queue)
+        # self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db", self.events_queue)
+        # self.intercom_relay = IntercomRelayMonitor(self.events_queue)
+        # self.gate_ctrl = GateController()
+        # self.timer_mgr = TimerManager(self.events_queue)
         
         # Start monitor services
-        self.vld_monitor.start()
-        self.card_validator_in.start()
-        self.card_validator_out.start()
-        self.intercom_relay.start()
+        # self.vld_monitor.start()
+        # self.card_validator_in.start()
+        # self.card_validator_out.start()
+        # self.intercom_relay.start()
+        self.dw = DisplayWorker()
         self.dw.start()
+        self.camera = CameraMonitor()
         self.camera.stream_handle(dw.show)
         self.camera.start()
 
@@ -57,11 +57,12 @@ class Application:
         # self.camera.cam_connecting_handle(self.__handle_cam_connecting)
 
         # Initialize state machine context
-        self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr, self.sessions_queue, self.dm)
+        # self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr, self.sessions_queue, self.dm)
         
     def __loop(self):
-        ev = self.events_queue.get()
-        self.ctx.do(ev)
+        # ev = self.events_queue.get()
+        # self.ctx.do(ev)
+        True
 
     # def __handle_video_stream(self, frame):
     #     self.dm.render(frame)
