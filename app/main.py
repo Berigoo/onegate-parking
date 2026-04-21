@@ -32,6 +32,7 @@ class Application:
             pass
         
     def __setup(self):
+        bsp.bsp_init()
         # Initialization
         self.events_queue = SessionQueue()
         # self.sessions_queue = SessionQueue() # may invalid
