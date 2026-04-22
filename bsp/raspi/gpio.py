@@ -5,7 +5,7 @@ import time
 
 def init_gpio():
     # input devices
-    GPIO.setup(config.PIN_IN_VLD, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
+    GPIO.setup(6, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
     GPIO.setup(config.PIN_IN_INTERCOM_RELAY1, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
         
     # output device
