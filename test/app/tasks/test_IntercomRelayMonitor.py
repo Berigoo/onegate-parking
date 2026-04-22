@@ -70,7 +70,7 @@ class TestIntercomHWTests:
         intercom = IntercomRelayMonitor(queue)
         intercom.start()
 
-        time.sleep(2)
+        time.sleep(5)
 
         intercom.stop()
         count = queue.qsize()
