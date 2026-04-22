@@ -742,7 +742,7 @@ class TestMainHWTests:
         session_queue = SessionQueue()
         intercom_relay = IntercomRelayMonitor(events_queue)
         gate_ctrl = GateController()
-        timer_mgr = TimerManager()
+        timer_mgr = TimerManager(events_queue)
         dm = DisplayManager
         ctx = SystemStateContext("Idle", None, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
 
