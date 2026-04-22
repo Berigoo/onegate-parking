@@ -1,5 +1,6 @@
 import pytest
 import time
+from bsp import bsp
 from unittest.mock import Mock, MagicMock, patch, call
 from app.tasks import IntercomRelayMonitor, GateController, TimerManager
 from app.core import SessionQueue, DisplayManager, SystemStateContext
@@ -739,6 +740,7 @@ class TestLogicFlow:
     
 class TestMainHWTests:
     def test_invoker_intercom(self):
+        bsp.bsp_init()
         events_queue = SessionQueue()
         session_queue = SessionQueue()
         intercom_relay = IntercomRelayMonitor(events_queue)
@@ -761,6 +763,7 @@ class TestMainHWTests:
         assert isinstance(ctx._state, WaitingForVehicleGone)
 
     def test_invoker_intercom_with_vld(self):
+        bsp.bsp_init()
         events_queue = SessionQueue()
         session_queue = SessionQueue()
         intercom_relay = IntercomRelayMonitor(events_queue)
