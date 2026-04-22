@@ -1,4 +1,5 @@
 import pytest
+import time
 from unittest.mock import Mock, MagicMock, patch, call
 from app.tasks import IntercomRelayMonitor
 from app.core import SessionQueue
@@ -69,7 +70,7 @@ class TestIntercomHWTests:
         intercom = IntercomRelayMonitor(queue)
         intercom.start()
 
-        sleep(10)
+        time.sleep(2)
 
         count = queue.qsize()
         assert count > 0
