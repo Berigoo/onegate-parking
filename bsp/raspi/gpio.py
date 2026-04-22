@@ -4,6 +4,8 @@ import gpiozero
 import time
 
 def init_gpio():
+    GPIO.setmode(GPIO.BCM)
+    
     # input devices
     GPIO.setup(6, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
     GPIO.setup(config.PIN_IN_INTERCOM_RELAY1, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
