@@ -959,7 +959,80 @@ class TestMainHWTests:
 
         assert isinstance(ctx._state, HoldingGate)
         
+    def test_multiplle_tap_at_same_time(self):
+        bsp.bsp_init()
+        events_queue = SessionQueue()
+        session_queue = SessionQueue()
+        intercom = IntercomRelayMonitor(events_queue)
+        vld = VLDMonitor(events_queue)
+        gate_ctrl = GateController()
+        timer_mgr = TimerManager(events_queue)
+        dm = DisplayManager()
+        ctx = SystemStateContext("Idle", vld, None, None, intercom, None, gate_ctrl, timer_mgr, session_queue, dm)
+        intercom.start()
+        vld.start()
 
+        event = StateEvent(
+            type=EventType.CARD_TAP,
+            payload=None
+        )
+        events_queue.put(event)
+        event = StateEvent(
+            type=EventType.CARD_OUT_VALID,
+            payload={
+                        "uid": "11223344",
+                        "number": "1231232",
+                        "is_valid": True
+                    }
+        )
+        events_queue.put(event)
+
+        ev = events_queue.get()
+        ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        event = StateEvent(
+            type=EventType.CARD_TAP,
+            payload=None
+        )
+        events_queue.put(event)
+        event = StateEvent(
+            type=EventType.CARD_IN_VALID,
+            payload={
+                        "uid": "11223345",
+                        "number": "1231233",
+                        "is_valid": True
+                    }
+        )
+
+        ev = events_queue.get()
+        ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        print('Waiting for first vehicle gone')
+
+        ev = events_queue.get()
+        ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        assert isinstance(app.ctx._state, WaitingForVehicleGone)
+
+        print('Waiting for second vehicle gone')
+
+        ev = events_queue.get()
+        ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        print('Waiting for timeout expired')
+
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        assert isinstance(app.ctx._state, Idle)
         
         
         
