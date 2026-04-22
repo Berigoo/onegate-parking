@@ -747,15 +747,44 @@ class TestMainHWTests:
         dm = DisplayManager()
         ctx = SystemStateContext("Idle", None, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
 
+        intercom_relay.start()
+
         print("Waiting for intercom signal...")
         time.sleep(3)
 
         assert events_queue.qsize() == 1
 
+        intercom_relay.stop()
         ev = events_queue.get()
         ctx.do(ev)
         
         assert isinstance(ctx._state, WaitingForVehicleGone)
+
+    def test_invoker_intercom_with_vld(self):
+        events_queue = SessionQueue()
+        session_queue = SessionQueue()
+        intercom_relay = IntercomRelayMonitor(events_queue)
+        vld = VLDMonitor(events_queue)
+        gate_ctrl = GateController()
+        timer_mgr = TimerManager(events_queue)
+        dm = DisplayManager()
+        ctx = SystemStateContext("Idle", vld, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
+        intercom.start()
+        vld.start()
+
+        print("Waiting for intercom signal...")
+        time.sleep(3)
+
+        assert events_queue.qsize() == 1
+
+        intercom.stop()
+        vld.stop()
+        ev = events_queue.get()
+        ctx.do(ev)
+        
+        assert isinstance(ctx._state, WaitingForVehicleGone)
+        
+        
 
         
 
