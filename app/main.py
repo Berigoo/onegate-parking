@@ -28,7 +28,7 @@ class Application:
         # Initialization
         self.events_queue = SessionQueue()
         self.sessions_queue = SessionQueue() # may invalid
-        # self.vld_monitor = VLDMonitor(self.events_queue)
+        self.vld_monitor = VLDMonitor(self.events_queue)
         # self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", "/etc/onegate-parking/cards.db", self.events_queue)
         # self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db", self.events_queue)
         self.intercom_relay = IntercomRelayMonitor(self.events_queue)
@@ -37,7 +37,7 @@ class Application:
         self.dm = DisplayManager()
         
         # Start monitor services
-        # self.vld_monitor.start()
+        self.vld_monitor.start()
         # self.card_validator_in.start()
         # self.card_validator_out.start()
         self.intercom_relay.start()
@@ -59,22 +59,6 @@ class Application:
         # self.ctx.do(ev)
         True
 
-    # def __handle_video_stream(self, frame):
-    #     self.dm.render(frame)
-
-    #     if cv2.waitKey(1) & 0xFF == ord('q'):
-    #         self.cam.release()
-    #         cv2.destroyAllWindows() # TODO gracefull exit
-    #         return
-
-    # def __handle_cam_connecting(self):
-    #     self.dm.render(None)
-
-    #     # if cv2.waitKey(1) & 0xFF == ord('q'):
-    #     #     self.cam.release()
-    #     #     cv2.destroyAllWindows() # TODO gracefull exit
-    #     #     return
-        
     def start(self):
         self.is_running = True
         self.__setup()
