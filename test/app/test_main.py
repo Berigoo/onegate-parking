@@ -791,6 +791,7 @@ class TestMainHWTests:
 
         assert isinstance(ctx._state, ClosingGate)
 
+        print("Waiting for timeout expired (6s)...")
         time.sleep(6)
 
         ev = events_queue.get()
