@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from app.core import SystemState
 from app.domain import EventType
 
