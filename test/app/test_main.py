@@ -793,8 +793,9 @@ class TestMainHWTests:
         ev = events_queue.get()
         ctx.do(ev)
 
-        print(ev.type)
-        
+        ev = events_queue.get()
+        ctx.do(ev)
+
         intercom.stop()
         vld.stop()
         
