@@ -1019,7 +1019,7 @@ class TestMainHWTests:
         ev = events_queue.get()
         ctx.do(ev)
 
-        assert isinstance(app.ctx._state, WaitingForVehicleGone)
+        assert isinstance(ctx._state, WaitingForVehicleGone)
 
         print('Waiting for second vehicle gone')
 
