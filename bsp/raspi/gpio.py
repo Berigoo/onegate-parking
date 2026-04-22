@@ -28,8 +28,8 @@ def write_boom_gate(state):
         GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.HIGH)
         
 def write_boom_gate_hold():
-    GPIO.output(config.PIN_BOOM_GATE_HIGH, GPIO.LOW)
-    GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.LOW)
+    GPIO.output(config.PIN_BOOM_GATE_HIGH, GPIO.HIGH)
+    GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.HIGH)
 
 def on_vld_in_high(cb): # execute 'cb' when in vld is HIGH
     GPIO.add_event_detect(config.PIN_IN_VLD, GPIO.RISING, callback=cb, bouncetime=2000)
