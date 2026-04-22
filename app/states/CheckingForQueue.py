@@ -27,8 +27,8 @@ class CheckingForQueue(SystemState):
                     "DELETE FROM entered_users WHERE uid=?",
                     (uid,)
                 )
-                conn.commit()
-                conn.close()
+            conn.commit()
+            conn.close()
 
         if self.context.sessions_queue.empty():
             self.context.set_state("ClosingGate")
