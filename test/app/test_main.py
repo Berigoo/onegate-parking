@@ -769,7 +769,7 @@ class TestMainHWTests:
         bsp.bsp_init()
         events_queue = SessionQueue()
         session_queue = SessionQueue()
-        intercom_relay = IntercomRelayMonitor(events_queue)
+        intercom = IntercomRelayMonitor(events_queue)
         vld = VLDMonitor(events_queue)
         gate_ctrl = GateController()
         timer_mgr = TimerManager(events_queue)
