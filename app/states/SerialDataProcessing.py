@@ -14,7 +14,7 @@ class SerialDataProcessing(SystemState):
     def execute(self):
         ev = self.context.current_event.type
         match ev:
-            case EventType.CARD_IN_VALID | EventType.CARD_OUT_VALID:
+            case EventType.CARD_IN_VALID:
                 self.context.timer_mgr.stop()
                 if self.context.current_event.payload["is_valid"]:
                     uid = self.context.current_event.payload["uid"]
@@ -32,6 +32,16 @@ class SerialDataProcessing(SystemState):
                     else:
                         self.context.set_state("AddingToQueue")
                     
+                else:
+                    # TODO info message, and maybe add sleep, so it can be rendered for n sec
+                    self.context.logger.warning("Card invalid")
+                    self.context.set_state("Idle")
+
+            case EventType.CARD_OUT_VALID:
+                self.context.timer_mgr.stop()
+                if self.context.current_event.payload["is_valid"]:
+                    # do not care about "user already entered ?" info
+                    self.context.set_state("AddingToQueue")
                 else:
                     # TODO info message, and maybe add sleep, so it can be rendered for n sec
                     self.context.logger.warning("Card invalid")
