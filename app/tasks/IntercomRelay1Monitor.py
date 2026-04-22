@@ -29,7 +29,7 @@ class IntercomRelayMonitor:
 
     #################### Task Logic
     def __setup(self):
-        bsp.bsp_read_intercom_relay()
+        bsp.bsp_on_intercom_relay_high(self.__when_intercom_relay_high)
         
     def __loop(self):
         pass

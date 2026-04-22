@@ -28,7 +28,7 @@ class Application:
         # Initialization
         self.events_queue = SessionQueue()
         self.sessions_queue = SessionQueue() # may invalid
-        self.vld_monitor = VLDMonitor(self.events_queue)
+        # self.vld_monitor = VLDMonitor(self.events_queue)
         # self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", "/etc/onegate-parking/cards.db", self.events_queue)
         # self.card_validator_out = CardValidatorOut("/dev/ttyUSB1", "/etc/onegate-parking/cards.db", self.events_queue)
         self.intercom_relay = IntercomRelayMonitor(self.events_queue)
@@ -37,7 +37,7 @@ class Application:
         self.dm = DisplayManager()
         
         # Start monitor services
-        self.vld_monitor.start()
+        # self.vld_monitor.start()
         # self.card_validator_in.start()
         # self.card_validator_out.start()
         self.intercom_relay.start()
