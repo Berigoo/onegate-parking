@@ -8,11 +8,11 @@ def init_gpio():
     
     # input devices
     GPIO.setup(6, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
-    GPIO.setup(PIN_IN_INTERCOM_RELAY1, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
+    GPIO.setup(config.PIN_IN_INTERCOM_RELAY1, GPIO.IN, pull_up_down=GPIO.PUD_OFF)
         
     # output device
-    GPIO.setup(PIN_BOOM_GATE_HIGH, GPIO.OUT, initial=GPIO.HIGH)
-    GPIO.setup(PIN_BOOM_GATE_LOW, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(config.PIN_BOOM_GATE_HIGH, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(config.PIN_BOOM_GATE_LOW, GPIO.OUT, initial=GPIO.HIGH)
 
 def read_vld_in():      # read in vld state
     return GPIO.input(config.PIN_IN_VLD)
