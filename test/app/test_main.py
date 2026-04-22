@@ -841,10 +841,15 @@ class TestMainHWTests:
         ev = events_queue.get()
         ctx.do(ev)
         
-        print('waiting fo vehicle gone')
+        print('waiting for vehicle gone...')
 
         ev = events_queue.get()
         ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        print('waiting for closing timeout expired...')
+        
         ev = events_queue.get()
         ctx.do(ev)
         
