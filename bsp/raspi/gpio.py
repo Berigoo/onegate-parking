@@ -18,7 +18,7 @@ def read_vld_in():      # read in vld state
     return GPIO.input(config.PIN_IN_VLD)
     
 def read_intercom_relay1(): # read intercom relay1 state
-    return GPIO.input(config.PIN_INTERCOM_RELAY1)
+    return GPIO.input(config.PIN_IN_INTERCOM_RELAY1)
 
 def write_boom_gate(state):
     if state is True:
