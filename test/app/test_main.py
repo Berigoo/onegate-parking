@@ -787,11 +787,11 @@ class TestMainHWTests:
 
         ev = events_queue.get()
         ctx.do(ev)
-        
-        assert isinstance(ctx._state, ClosingGate)
 
         ev = events_queue.get()
         ctx.do(ev)
+        
+        assert isinstance(ctx._state, ClosingGate)
 
         ev = events_queue.get()
         ctx.do(ev)
