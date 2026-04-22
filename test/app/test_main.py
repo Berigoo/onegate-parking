@@ -1005,6 +1005,7 @@ class TestMainHWTests:
                         "is_valid": True
                     }
         )
+        events_queue.put(event)
 
         ev = events_queue.get()
         ctx.do(ev)
