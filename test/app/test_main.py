@@ -783,6 +783,7 @@ class TestMainHWTests:
         ev = events_queue.get()
         print("ev:", ev)
         ctx.do(ev)
+        print(ctx._state)
 
         print("Waiting for vld signal going low...")
 
@@ -793,6 +794,7 @@ class TestMainHWTests:
         ev = events_queue.get()
         print("ev:", ev)
         ctx.do(ev)
+        print(ctx._state)
         
         assert isinstance(ctx._state, ClosingGate)
 
