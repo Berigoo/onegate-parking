@@ -780,8 +780,9 @@ class TestMainHWTests:
 
         print("Waiting for intercom signal...")
 
-        print(events_queue.qsize())
-        assert events_queue.qsize() == 1
+        c = events_queue.qsize()
+        print(c)
+        assert c == 1
 
         print("Waiting for vld signal going low...")
         time.sleep(3)
