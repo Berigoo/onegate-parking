@@ -774,7 +774,7 @@ class TestMainHWTests:
         gate_ctrl = GateController()
         timer_mgr = TimerManager(events_queue)
         dm = DisplayManager()
-        ctx = SystemStateContext("Idle", vld, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
+        ctx = SystemStateContext("Idle", vld, None, None, intercom, None, gate_ctrl, timer_mgr, session_queue, dm)
         intercom.start()
         vld.start()
 
