@@ -1,7 +1,7 @@
 from bsp import bsp
 from enum import Enum
 import threading
-from app.core import SessionQueue, Logger
+from app.core import SessionQueue, Logger, SystemStateContext
 from app.domain import StateEvent, EventType
 
 class GateState(Enum):

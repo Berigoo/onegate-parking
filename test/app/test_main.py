@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import Mock, MagicMock, patch, call
-from app.tasks import IntercomRelayMonitor
+from app.tasks import IntercomRelayMonitor, GateController, TimerManager
+from app.core import SessionQueue, DisplayManager
 from app.domain import StateEvent, EventType
 from app.main import Application
 from app.states import Idle, OpeningGate, SerialDataProcessing, WaitingForVehicleGone, HoldingGate, ClosingGate
@@ -735,4 +736,26 @@ class TestLogicFlow:
 
     #     assert isinstance(app.ctx._state, Idle)        
     
+class TestMainHWTests:
+    def test_invoker_intercom(self):
+        events_queue = SessionQueue()
+        session_queue = SessionQueue()
+        intercom_relay = IntercomRelayMonitor(events_queue)
+        gate_ctrl = GateController()
+        timer_mgr = TimerManager()
+        dm = DisplayManager
+        ctx = SystemStateContext("Idle", None, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
+
+        print("Waiting for intercom signal...")
+        time.sleep(3)
+
+        assert events_queue.qsize() == 1
+
+        ev = events_queue.get()
+        ctx.do(ev)
+        
+        assert isinstance(ctx._state, WaitingForVehicleGone)
+
+        
+
         
