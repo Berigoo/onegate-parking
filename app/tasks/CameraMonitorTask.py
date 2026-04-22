@@ -53,7 +53,7 @@ class CameraMonitor:
         self.logger = Logger("Camera")
         self.cam = None
         self.cam_handle: Callable = None
-        self.generic_handle: Callable = None
+        self.cam_connecting: Callable = None
 
     #################### threading methods
     def start(self):
