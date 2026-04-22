@@ -781,14 +781,25 @@ class TestMainHWTests:
         print("Waiting for intercom signal...")
         time.sleep(3)
 
-        assert events_queue.qsize() == 1
+        print("Waiting for vld signal going low...")
+        time.sleep(3)
 
-        intercom.stop()
-        vld.stop()
+        ev = events_queue.get()
+        ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        assert isinstance(ctx._state, ClosingGate)
+
+        time.sleep(6)
+
         ev = events_queue.get()
         ctx.do(ev)
         
-        assert isinstance(ctx._state, WaitingForVehicleGone)
+        intercom.stop()
+        vld.stop()
+        
+        assert isinstance(ctx._state, Idle)
         
         
 
