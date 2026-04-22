@@ -47,7 +47,7 @@ class Application:
         self.dw.start()
         self.camera = CameraMonitor()
         self.camera.stream_handle(self.dw.show)
-        self.camera.cam_connecting(self.dw.show)
+        self.camera.cam_connecting_handle(self.dw.show)
         self.camera.start()
         self.dm.set_text(TextType.WELCOME)
 
