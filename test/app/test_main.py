@@ -1,4 +1,5 @@
 import pytest
+import time
 from unittest.mock import Mock, MagicMock, patch, call
 from app.tasks import IntercomRelayMonitor, GateController, TimerManager
 from app.core import SessionQueue, DisplayManager, SystemStateContext
