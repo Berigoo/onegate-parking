@@ -19,6 +19,7 @@ class TestGateControllerHWTests:
         gate.close()
         time.sleep(3)
         gate.hold()
+        gate.open()
 
     # def test_when_close(self):
     #     bsp.bsp_init()
