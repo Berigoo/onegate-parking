@@ -36,9 +36,9 @@ class BSP:
     def bsp_init(self):
         self._impl.bsp_init()
     def bsp_read_vld_in(self):
-        return self._impl.bsp_read_vld_in()
+        return self._impl.bsp_read_vld_in() == 1
     def bsp_read_intercom(self):
-        return self._impl.bsp_read_intercom()
+        return self._impl.bsp_read_intercom() == 1
     def bsp_on_vld_in_high(self, callback):
         self._impl.bsp_on_vld_in_high(callback)
     def bsp_on_vld_in_low(self, callback):

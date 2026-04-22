@@ -36,7 +36,7 @@ class IntercomRelayMonitor:
         
     def __loop(self):
         ret = bsp.bsp_read_intercom()
-        print(ret is False)
+        print(ret)
         if self.last_state is False and ret is True:
             self.__when_intercom_relay_high()
             time.sleep(2)       # TODO proper debouncing
