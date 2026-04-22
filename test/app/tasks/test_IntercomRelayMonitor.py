@@ -47,7 +47,7 @@ class TestIntercomRelayMonitorThreading:
         intercom_relay_monitor.thread.join(timeout=2)
         assert not intercom_relay_monitor.thread.is_alive()
 
-class TestVLDMonitorBasicFunctionalitites:
+class TestIntercomBasicFunctionalitites:
     def test_when_intercom_relay_high(self):
         queue = SessionQueue()
         intercom = IntercomRelayMonitor(queue)
@@ -56,3 +56,15 @@ class TestVLDMonitorBasicFunctionalitites:
 
         ev = queue.get()
         assert ev.type is EventType.INTERCOM_OVERRIDE
+
+class TestIntercomHWTests:
+    def test_when_pin_pulled_high(self):
+        queue = SessionQueue()
+        intercom = IntercomRelayMonitor(queue)
+        intercom.start()
+
+        sleep(10)
+
+        count = queue.qsize()
+        assert count > 0
+        
