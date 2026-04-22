@@ -1,6 +1,5 @@
 from . import config
 import RPi.GPIO as GPIO
-import gpiozero
 import time
 
 def init_gpio():
