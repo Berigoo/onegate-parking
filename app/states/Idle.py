@@ -10,7 +10,7 @@ class Idle(SystemState):
             case EventType.CARD_TAP:
                 self.context.set_state("SerialDataProcessing")
             case EventType.INTERCOM_OVERRIDE:
-                self.context.set_state("OpeningGate")
+                self.context.set_state("AddingToQueue")
             case EventType.VEHICLE_DETECTED:
                 self.context.set_state("WaitingForEmoneyTap")
             case EventType.ASKING_FOR_SHUTDOWN:
