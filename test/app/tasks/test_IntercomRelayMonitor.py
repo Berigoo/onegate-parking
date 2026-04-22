@@ -3,9 +3,11 @@ from unittest.mock import Mock, MagicMock, patch, call
 from app.tasks import IntercomRelayMonitor
 from app.core import SessionQueue
 from app.domain import StateEvent, EventType
+from bsp import bsp
 
 class TestIntercomRelayMonitorThreading:
     def test_start_creates_thread(self):
+        bsp.bsp_init()
         queue = SessionQueue()
         intercom_relay_monitor = IntercomRelayMonitor(queue)
 
@@ -19,6 +21,7 @@ class TestIntercomRelayMonitorThreading:
         assert intercom_relay_monitor.thread.daemon is True
 
     def test_start_prevents_duplicate_threads(self):
+        bsp.bsp_init()
         queue = SessionQueue()
         intercom_relay_monitor = IntercomRelayMonitor(queue)
 
@@ -31,6 +34,7 @@ class TestIntercomRelayMonitorThreading:
         assert first_thread is second_thread
 
     def test_stop_gracefully_stops_thread(self):
+        bsp.bsp_init()
         queue = SessionQueue()
         intercom_relay_monitor = IntercomRelayMonitor(queue)
 
@@ -49,6 +53,7 @@ class TestIntercomRelayMonitorThreading:
 
 class TestIntercomBasicFunctionalitites:
     def test_when_intercom_relay_high(self):
+        bsp.bsp_init()
         queue = SessionQueue()
         intercom = IntercomRelayMonitor(queue)
 
@@ -59,6 +64,7 @@ class TestIntercomBasicFunctionalitites:
 
 class TestIntercomHWTests:
     def test_when_pin_pulled_high(self):
+        bsp.bsp_init()
         queue = SessionQueue()
         intercom = IntercomRelayMonitor(queue)
         intercom.start()
