@@ -22,10 +22,6 @@ class Application:
         self.ctx = None
         self.dm = None
 
-        # Initialize hardware interface if available. In test environments
-        # or non-RPi setups, this call may fail; swallow exceptions to keep
-        # unit tests deterministic while still allowing mocked components
-        # to be exercised.
         bsp.bsp_init()
         
     def __setup(self):
@@ -51,6 +47,7 @@ class Application:
         self.dw.start()
         self.camera = CameraMonitor()
         self.camera.stream_handle(self.dw.show)
+        self.camera.cam_connecting(self.dw.show)
         self.camera.start()
         self.dm.set_text(TextType.WELCOME)
 

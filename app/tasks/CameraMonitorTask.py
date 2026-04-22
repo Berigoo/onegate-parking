@@ -98,7 +98,7 @@ class CameraMonitor:
         if not self.cam.isOpened():
             self.logger.info('Reconnecting...')
             if self.cam_connecting is not None:
-                self.cam_connecting()
+                self.cam_connecting(None)
             time.sleep(CAM_RETRY_DELAY)
             self.__connect()
             return
@@ -107,7 +107,7 @@ class CameraMonitor:
         if not ret:
             self.logger.warning('Disconnnected!')
             if self.cam_connecting is not None:
-                self.cam_connecting()
+                self.cam_connecting(None)
             self.cam.release()
             time.sleep(CAM_RETRY_DELAY)
             self.__connect()
