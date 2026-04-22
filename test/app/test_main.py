@@ -1,5 +1,7 @@
 import pytest
 import time
+from datetime import datetime
+import sqlite3
 from bsp import bsp
 from unittest.mock import Mock, MagicMock, patch, call
 from app.tasks import IntercomRelayMonitor, GateController, TimerManager, VLDMonitor
@@ -805,6 +807,54 @@ class TestMainHWTests:
         vld.stop()
         
         assert isinstance(ctx._state, Idle)
+
+    def test_when_valid_dummy_card_data(self):
+        bsp.bsp_init()
+        events_queue = SessionQueue()
+        session_queue = SessionQueue()
+        intercom = IntercomRelayMonitor(events_queue)
+        vld = VLDMonitor(events_queue)
+        gate_ctrl = GateController()
+        timer_mgr = TimerManager(events_queue)
+        dm = DisplayManager()
+        ctx = SystemStateContext("Idle", vld, None, None, intercom, None, gate_ctrl, timer_mgr, session_queue, dm)
+        intercom.start()
+        vld.start()        
+        
+        event = StateEvent(
+            type=EventType.CARD_TAP,
+            payload=None
+        )
+        events_queue.put(event)
+        event = StateEvent(
+            type=EventType.CARD_IN_VALID,
+            payload={
+                        "uid": "11223344",
+                        "number": "1231232",
+                        "is_valid": True
+                    }
+        )
+        events_queue.put(event)
+
+        ev = events_queue.get()
+        ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+        
+        print('waiting fo vehicle gone')
+
+        ev = events_queue.get()
+        ctx.do(ev)
+        ev = events_queue.get()
+        ctx.do(ev)
+        
+        intercom.stop()
+        vld.stop()
+
+        assert isinstance(ctx._state, Idle)
+
+
+        
         
         
 

@@ -5,9 +5,10 @@ from app.domain import StateEvent, EventType
 from app.core import SessionQueue, Logger
 
 CARD_DATA_LEN=21
+USERS_DB=os.getenv('USERS_DB')
 
 class CardValidatorOut:
-    def __init__(self, port, db, queue_to_push: SessionQueue):
+    def __init__(self, port, db=USERS_DB, queue_to_push: SessionQueue):
         self.port = port
         self.db = db
         self.queue = queue_to_push
@@ -87,8 +88,8 @@ class CardValidatorOut:
 
             # Check if uid or number exists
             cursor.execute(
-                "SELECT 1 FROM cards WHERE uid = ? OR number = ?",
-                (data["uid"], data["number"])
+                "SELECT 1 FROM cards WHERE uid = ?",
+                (data["uid"],)
             )
             result = cursor.fetchone() is not None
             conn.close()

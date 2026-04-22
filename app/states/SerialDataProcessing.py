@@ -2,6 +2,7 @@ from app.core import SystemState
 from app.domain import EventType
 
 STATE_TIMEOUT = 15              # back to IDLE
+ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
 
 class SerialDataProcessing(SystemState):
     def init(self):
@@ -14,14 +15,28 @@ class SerialDataProcessing(SystemState):
             case EventType.CARD_IN_VALID | EventType.CARD_OUT_VALID:
                 self.context.timer_mgr.stop()
                 if self.context.current_event.payload["is_valid"]:
-                    self.context.set_state("AddingToQueue")
+                    uid = self.context.current_event.payload["uid"]
+                    conn = sqlite3.connect(ENTERED_USERS_DB)
+                    cursor = conn.cursor()
+                    cursor.execute(
+                        "SELECT 1 FROM entered_users WHERE uid=?",
+                        (uid, )
+                    )
+                    row = cursor.fetchone()
+                    conn.close()
+                    
+                    if row is not None:
+                        self.context.set_state("Idle") # user already entered
+                    else:
+                        self.context.set_state("AddingToQueue")
+                    
                 else:
                     # TODO info message, and maybe add sleep, so it can be rendered for n sec
                     self.context.logger.warning("Card invalid")
                     self.context.set_state("Idle")
             case EventType.INTERCOM_OVERRIDE:
                 self.context.timer_mgr.stop()
-                self.context.set_state("OpeningGate")
+                self.context.set_state("AddingToQueue")
             case EventType.GENERIC_TIMEOUT:
                 self.context.set_state("Idle")
             

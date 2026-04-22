@@ -1,14 +1,15 @@
 import sqlite3
+import os
 from datetime import datetime
 from app.core import SystemState
 from app.domain import EventType, TextType
 
-ENTERED_USERS_DB = "entered_users.db"
+ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')bs
 
 class CheckingForQueue(SystemState):
     def init(self):
         ev = self.context.sessions_queue.get() # guarantee CARD_IN_VALID or CARD_OUT_VALID or INTERCOM_OVERRIDE
-        if ev.type is EventType.INTERCOM_OVERRIDE:
+        if ev.type is EventType.INTERCOM_OVERRIDE: # pass special access
             pass
         else:
         

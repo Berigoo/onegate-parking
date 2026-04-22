@@ -12,4 +12,4 @@ class HoldingGate(SystemState):
             case EventType.VEHICLE_GONE:
                 self.context.set_state("ClosingGate")
             case EventType.INTERCOM_OVERRIDE:
-                self.context.set_state("OpeningGate")
+                self.context.set_state("AddingToQueue")
