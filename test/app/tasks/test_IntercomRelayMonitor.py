@@ -72,6 +72,7 @@ class TestIntercomHWTests:
 
         time.sleep(2)
 
+        intercom.stop()
         count = queue.qsize()
         assert count > 0
         
