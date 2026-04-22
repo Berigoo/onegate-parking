@@ -7,20 +7,11 @@ import time
 from bsp import bsp
 
 class TestGateControllerHWTests:
-    def test_when_open(self):        # pls pay attentiona to relay 'click' sound
+    def test_when_open_close_hold(self):        # pls pay attentiona to relay 'click' sound
         bsp.bsp_init()
         gate = GateController()
         gate.open()
         time.sleep(3)
-
-    def test_when_close(self):
-        bsp.bsp_init()
-        gate = GateController()
         gate.close()
         time.sleep(3)
-
-    # def test_when_close(self):
-    #     bsp.bsp_init()
-    #     gate = GateController()
-    #     gate.hold()
-    #     time.sleep(3)
+        gate.hold()
