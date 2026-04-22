@@ -1033,7 +1033,7 @@ class TestMainHWTests:
         ev = events_queue.get()
         ctx.do(ev)
 
-        assert isinstance(app.ctx._state, Idle)
+        assert isinstance(ctx._state, Idle)
         
         
         
