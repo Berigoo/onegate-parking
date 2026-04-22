@@ -2,7 +2,7 @@ import pytest
 import time
 from bsp import bsp
 from unittest.mock import Mock, MagicMock, patch, call
-from app.tasks import IntercomRelayMonitor, GateController, TimerManager
+from app.tasks import IntercomRelayMonitor, GateController, TimerManager, VLDMonitor
 from app.core import SessionQueue, DisplayManager, SystemStateContext
 from app.domain import StateEvent, EventType
 from app.main import Application
