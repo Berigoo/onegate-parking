@@ -743,7 +743,7 @@ class TestMainHWTests:
         intercom_relay = IntercomRelayMonitor(events_queue)
         gate_ctrl = GateController()
         timer_mgr = TimerManager(events_queue)
-        dm = DisplayManager
+        dm = DisplayManager()
         ctx = SystemStateContext("Idle", None, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
 
         print("Waiting for intercom signal...")
