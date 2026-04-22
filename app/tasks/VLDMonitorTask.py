@@ -40,7 +40,6 @@ class VLDMonitor:
         
     def __loop(self):
         ret = bsp.bsp_read_vld_in()
-        print(ret)
         if self.last_state is False and ret is True:
             self.__when_vld_high()
             time.sleep(1)            # TODO proper debouncing

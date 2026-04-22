@@ -9,6 +9,7 @@ class SessionQueue:
         self._queue = Queue()
 
     def put(self, event: StateEvent):
+        print(event)
         self._queue.put(event)
 
     def get(self, timeout=None):
