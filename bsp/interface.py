@@ -9,6 +9,9 @@ class BSPInterface(ABC):
     def bsp_read_vld_in(self) -> bool: ...
 
     @abstractmethod
+    def bsp_read_intercom(self) -> bool: ...
+    
+    @abstractmethod
     def bsp_on_vld_in_high(self, callback: Callable[[], None]) -> None: ...
 
     @abstractmethod
@@ -34,6 +37,8 @@ class BSP:
         self._impl.bsp_init()
     def bsp_read_vld_in(self):
         return self._impl.bsp_read_vld_in()
+    def bsp_read_intercom(self):
+        return self._impl.bsp_read_intercom()
     def bsp_on_vld_in_high(self, callback):
         self._impl.bsp_on_vld_in_high(callback)
     def bsp_on_vld_in_low(self, callback):

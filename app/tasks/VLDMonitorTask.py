@@ -9,6 +9,7 @@ class VLDMonitor:
         self.running = False
         self.thread = None
         self.logger = Logger("VLDMonitor")
+        self.last_state = False
 
     #################### threading methods
     def start(self):
@@ -32,11 +33,19 @@ class VLDMonitor:
         return bsp.bsp_read_vld_in()
 
     def __setup(self):
-        bsp.bsp_on_vld_in_high(self.__when_vld_high)
-        bsp.bsp_on_vld_in_low(self.__when_vld_low)
+        # bsp.bsp_on_vld_in_high(self.__when_vld_high)
+        # bsp.bsp_on_vld_in_low(self.__when_vld_low)
+        pass
         
     def __loop(self):
-        pass
+        ret = bsp.bsp_read_vld_in()
+        if self.last_state is False and ret is True:
+            self.__when_vld_high()
+            sleep(2)            # TODO proper debouncing
+        elif self.last_state is True and ret is False:
+            self.__when_vld_low()
+            sleep(2)
+        self.last_state = ret
 
     def __when_vld_high(self):
         event = StateEvent(

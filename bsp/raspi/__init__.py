@@ -8,6 +8,9 @@ class BSPRaspi(BSPInterface):
     def bsp_read_vld_in(self):
         return gpio.read_vld_in()
 
+    def bsp_read_intercom(self):
+        return gpio.read_intercom()
+
     def bsp_on_vld_in_high(self, cb):
         gpio.on_vld_in_high(cb)
 
