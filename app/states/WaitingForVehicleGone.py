@@ -19,10 +19,9 @@ class WaitingForVehicleGone(SystemState):
             case EventType.VEHICLE_DETECTED:
                 self.next_low_signal = False
             case EventType.VEHICLE_GONE:
-                print('low signal')
-                print(not self.next_low_signal)
                 if not self.next_low_signal:
                     self.context.timer_mgr.stop()
+                    print('checking for queue')
                     self.context.set_state("CheckingForQueue")
             case EventType.GENERIC_TIMEOUT:
                 self.context.set_state("ClosingGate")
