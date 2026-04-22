@@ -8,7 +8,7 @@ CARD_DATA_LEN=21
 USERS_DB=os.getenv('USERS_DB')
 
 class CardValidatorOut:
-    def __init__(self, port, db=USERS_DB, queue_to_push: SessionQueue):
+    def __init__(self, port, queue_to_push: SessionQueue, db=USERS_DB):
         self.port = port
         self.db = db
         self.queue = queue_to_push
