@@ -739,31 +739,31 @@ class TestLogicFlow:
     #     assert isinstance(app.ctx._state, Idle)        
     
 class TestMainHWTests:
-    # def test_invoker_intercom(self):
-    #     bsp.bsp_init()
-    #     events_queue = SessionQueue()
-    #     session_queue = SessionQueue()
-    #     intercom_relay = IntercomRelayMonitor(events_queue)
-    #     vld = VLDMonitor(events_queue)
-    #     gate_ctrl = GateController()
-    #     timer_mgr = TimerManager(events_queue)
-    #     dm = DisplayManager()
-    #     ctx = SystemStateContext("Idle", vld, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
+    def test_invoker_intercom(self):
+        bsp.bsp_init()
+        events_queue = SessionQueue()
+        session_queue = SessionQueue()
+        intercom_relay = IntercomRelayMonitor(events_queue)
+        vld = VLDMonitor(events_queue)
+        gate_ctrl = GateController()
+        timer_mgr = TimerManager(events_queue)
+        dm = DisplayManager()
+        ctx = SystemStateContext("Idle", vld, None, None, intercom_relay, None, gate_ctrl, timer_mgr, session_queue, dm)
 
-    #     intercom_relay.start()
-    #     vld.start()
+        intercom_relay.start()
+        vld.start()
 
-    #     print("Waiting for intercom signal...")
-    #     time.sleep(3)
+        print("Waiting for intercom signal...")
+        time.sleep(3)
 
-    #     assert events_queue.qsize() == 1
+        assert events_queue.qsize() == 1
 
-    #     intercom_relay.stop()
-    #     vld.stop()
-    #     ev = events_queue.get()
-    #     ctx.do(ev)
+        intercom_relay.stop()
+        vld.stop()
+        ev = events_queue.get()
+        ctx.do(ev)
         
-    #     assert isinstance(ctx._state, WaitingForVehicleGone)
+        assert isinstance(ctx._state, WaitingForVehicleGone) 
 
     def test_invoker_intercom_with_vld(self):
         bsp.bsp_init()
@@ -779,9 +779,8 @@ class TestMainHWTests:
         vld.start()
 
         print("Waiting for intercom signal...")
-        time.sleep(3)
 
-        prinnt(events_queue.qsize())
+        print(events_queue.qsize())
         assert events_queue.qsize() == 1
 
         print("Waiting for vld signal going low...")
