@@ -784,6 +784,7 @@ class TestMainHWTests:
         print("Waiting for vld signal going low...")
         time.sleep(3)
 
+        assert events_queue.qsize == 2
         ev = events_queue.get()
         ctx.do(ev)
         ev = events_queue.get()
