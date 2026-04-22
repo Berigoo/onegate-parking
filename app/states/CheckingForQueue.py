@@ -4,7 +4,7 @@ from datetime import datetime
 from app.core import SystemState
 from app.domain import EventType, TextType
 
-ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')bs
+ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
 
 class CheckingForQueue(SystemState):
     def init(self):
