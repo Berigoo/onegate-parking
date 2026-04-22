@@ -1,5 +1,6 @@
 from bsp import bsp
 import threading
+import time
 from app.core import SessionQueue, Logger
 from app.domain import StateEvent, EventType
 
@@ -41,10 +42,10 @@ class VLDMonitor:
         ret = bsp.bsp_read_vld_in()
         if self.last_state is False and ret is True:
             self.__when_vld_high()
-            sleep(1)            # TODO proper debouncing
+            time.sleep(1)            # TODO proper debouncing
         elif self.last_state is True and ret is False:
             self.__when_vld_low()
-            sleep(1)
+            time.sleep(1)
         self.last_state = ret
 
     def __when_vld_high(self):
