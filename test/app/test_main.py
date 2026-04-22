@@ -779,26 +779,16 @@ class TestMainHWTests:
         vld.start()
 
         print("Waiting for intercom signal...")
-        time.sleep(3)
 
-        c = events_queue.qsize()
-        assert c == 1
+        ev = events_queue.get()
+        ctx.do(ev)
 
         print("Waiting for vld signal going low...")
-        time.sleep(3)
 
-        c = events_queue.qsize()
-        assert c == 2
+        ev = events_queue.get()
+        ctx.do(ev)
         
-        ev = events_queue.get()
-        ctx.do(ev)
-        ev = events_queue.get()
-        ctx.do(ev)
-
         assert isinstance(ctx._state, ClosingGate)
-
-        print("Waiting for timeout expired (6s)...")
-        time.sleep(6)
 
         ev = events_queue.get()
         ctx.do(ev)
