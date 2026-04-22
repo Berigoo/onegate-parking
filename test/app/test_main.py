@@ -781,14 +781,17 @@ class TestMainHWTests:
         print("Waiting for intercom signal...")
 
         ev = events_queue.get()
+        print("ev:", ev)
         ctx.do(ev)
 
         print("Waiting for vld signal going low...")
 
         ev = events_queue.get()
+        print("ev:", ev)
         ctx.do(ev)
 
         ev = events_queue.get()
+        print("ev:", ev)
         ctx.do(ev)
         
         assert isinstance(ctx._state, ClosingGate)
