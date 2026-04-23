@@ -307,10 +307,15 @@ class TestCardValidatorHWTests:
         intercom.start()
         vld.start()
 
+
+        print('waiting for card tap...')
+        
         ev = events_queue.get()
         ctx.do(ev)
 
         assert ev.type == EventType.CARD_TAP
+
+        print('waiting to be processed...')
         
         ev = events_queue.get()
         ctx.do(ev)
