@@ -290,3 +290,30 @@ class TestCardValidatorIntegration:
             assert is_valid is True
 
         conn.close()
+
+class TestCardValidatorHWTests:
+    def test_waiting_for_perfect_read(self):
+        bsp.bsp_init()
+        events_queue = SessionQueue()
+        session_queue = SessionQueue()
+        intercom = IntercomRelayMonitor(events_queue)
+        vld = VLDMonitor(events_queue)
+        gate_ctrl = GateController()
+        timer_mgr = TimerManager(events_queue)
+        card_validator_in = CardValidatorIn("/dev/ttyUSB0", events_queue)
+        dm = DisplayManager()
+        ctx = SystemStateContext("Idle", vld, None, None, intercom, None, gate_ctrl, timer_mgr, session_queue, dm)
+        intercom.start()
+        vld.start()
+
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        assert ev.type == EventType.CARD_TAP
+        
+        ev = events_queue.get()
+        ctx.do(ev)
+
+        assert ev.type == EventType.CARD_IN_TAP
+
+        print(ev)

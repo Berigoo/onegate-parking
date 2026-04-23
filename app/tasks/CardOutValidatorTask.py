@@ -1,15 +1,22 @@
 import os
 import serial
 import threading
-import sqlite3
+import mariadb
 from app.domain import StateEvent, EventType
 from app.core import SessionQueue, Logger
 
 CARD_DATA_LEN=21
 USERS_DB=os.getenv('USERS_DB')
+DB_CONF = {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "laravel",
+    "password": "",
+    "database": "onegate_parkinng_dashboard"
+}
 
 class CardValidatorOut:
-    def __init__(self, port, queue_to_push: SessionQueue, db=USERS_DB):
+    def __init__(self, port, queue_to_push: SessionQueue, db=DB_CONF):
         self.port = port
         self.db = db
         self.queue = queue_to_push
@@ -84,12 +91,12 @@ class CardValidatorOut:
 
     def __validate(self, data):
         try:
-            conn = sqlite3.connect(self.db)
+            conn = mariadb.connect(self.db)
             cursor = conn.cursor()
 
             # Check if uid or number exists
             cursor.execute(
-                "SELECT 1 FROM cards WHERE uid = ?",
+                "SELECT 1 FROM user_cards WHERE uid = ?",
                 (data["uid"],)
             )
             result = cursor.fetchone() is not None
