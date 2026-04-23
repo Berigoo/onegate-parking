@@ -304,6 +304,7 @@ class TestCardValidatorHWTests:
         card_validator_in = CardValidatorIn("/dev/ttyUSB0", events_queue)
         dm = DisplayManager()
         ctx = SystemStateContext("Idle", vld, None, None, intercom, None, gate_ctrl, timer_mgr, session_queue, dm)
+        card_validator_in.start()
         intercom.start()
         vld.start()
 
@@ -323,3 +324,8 @@ class TestCardValidatorHWTests:
         assert ev.type == EventType.CARD_IN_TAP
 
         print(ev)
+
+        card_validator_in.stop()
+        intercom.stop()
+        vld.stop()
+        
