@@ -2,7 +2,7 @@ import pytest
 import sqlite3
 import threading
 import time
-import bsp as bsp
+from bsp import bsp
 from unittest.mock import Mock, MagicMock, patch, call
 from app.tasks.CardInValidatorTask import CardValidatorIn
 from app.core import SessionQueue, Logger
