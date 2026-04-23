@@ -5,7 +5,7 @@ import time
 from bsp import bsp
 from unittest.mock import Mock, MagicMock, patch, call
 from app.tasks import IntercomRelayMonitor, GateController, TimerManager, VLDMonitor, CardValidatorIn
-from app.core import SessionQueue, Logger, DisplayManager
+from app.core import SessionQueue, DisplayManager, SystemStateContext
 from app.domain import StateEvent, EventType
 
 
