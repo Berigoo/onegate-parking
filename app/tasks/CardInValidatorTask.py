@@ -50,29 +50,30 @@ class CardValidatorIn:
         self.serial = self.__serial_connect(self.port)
     def __loop(self):
         if self.serial is None:
-            self.serial = self.__serial_connect(self.port)
-            if self.serial is None:
-                time.sleep(0.1)
-                return
-        try:
-            if getattr(self.serial, 'in_waiting', 0) > 0:
-                raw_data = self.serial.readline()
+            self.serial_reconnect()
+        if self.serial.in_waiting > 0:
+            event = StateEvent(
+                        type=EventType.CARD_TAP,
+                        payload=None
+                    )
+            self.queue.put(event)
+            raw_data = self.serial.readline()
+            try:
                 if raw_data:
                     data = self.__parse(raw_data)
-                    if data is not None:
-                        is_valid = self.__validate(data)
-                        obj = {
-                            "uid": data["uid"],
-                            "number": data["number"],
-                            "is_valid": is_valid
-                        }
-                        event = StateEvent(
-                            type=EventType.CARD_IN_VALID,
-                            payload=obj
-                        )
-                        self.queue.put(event)
-        except Exception as e:
-            self.logger.warning(f"Card invalid or system broke: {e}")
+                    is_valid = self.__validate(data)
+                    obj = {
+                        "uid": data["uid"],
+                        "number": data["number"],
+                        "is_valid": is_valid
+                    }
+                    event = StateEvent(
+                        type=EventType.CARD_IN_VALID,
+                        payload=obj
+                    )
+                    self.queue.put(event)
+            except Exception as e:
+                self.logger.warning("Kartu tidak valid atau sistem gagal", e)
 
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:
@@ -98,7 +99,7 @@ class CardValidatorIn:
 
     def __validate(self, data):
         try:
-            conn = mariadb.connect(self.db)
+            conn = mariadb.connect(**self.db)
             cursor = conn.cursor()
 
             # Check if uid or number exists

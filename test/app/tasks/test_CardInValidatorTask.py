@@ -2,9 +2,10 @@ import pytest
 import sqlite3
 import threading
 import time
-from bsp import bsp
+# from bsp import bsp
 from unittest.mock import Mock, MagicMock, patch, call
-from app.tasks import IntercomRelayMonitor, GateController, TimerManager, VLDMonitor, CardValidatorIn
+# from app.tasks import IntercomRelayMonitor, GateController, TimerManager, VLDMonitor, CardValidatorInw
+from app.tasks import CardValidatorIn, TimerManager
 from app.core import SessionQueue, DisplayManager, SystemStateContext
 from app.domain import StateEvent, EventType
 
@@ -294,20 +295,19 @@ class TestCardValidatorIntegration:
 
 class TestCardValidatorHWTests:
     def test_waiting_for_perfect_read(self):
-        bsp.bsp_init()
+        # bsp.bsp_init()
         events_queue = SessionQueue()
         session_queue = SessionQueue()
-        intercom = IntercomRelayMonitor(events_queue)
-        vld = VLDMonitor(events_queue)
-        gate_ctrl = GateController()
+        # intercom = IntercomRelayMonitor(events_queue)
+        # vld = VLDMonitor(events_queue)
+        # gate_ctrl = GateController()
         timer_mgr = TimerManager(events_queue)
         card_validator_in = CardValidatorIn("/dev/ttyUSB0", events_queue)
         dm = DisplayManager()
-        ctx = SystemStateContext("Idle", vld, None, None, intercom, None, gate_ctrl, timer_mgr, session_queue, dm)
+        ctx = SystemStateContext("Idle", None, card_validator_in, None, None, None, None, timer_mgr, session_queue, dm)
         card_validator_in.start()
-        intercom.start()
-        vld.start()
-
+        # intercom.start()
+        # vld.start()
 
         print('waiting for card tap...')
         
@@ -321,11 +321,9 @@ class TestCardValidatorHWTests:
         ev = events_queue.get()
         ctx.do(ev)
 
-        assert ev.type == EventType.CARD_IN_TAP
+        assert ev.type == EventType.CARD_IN_VALID
 
-        print(ev)
 
         card_validator_in.stop()
-        intercom.stop()
-        vld.stop()
-        
+        # intercom.stop()
+        # vld.stop()

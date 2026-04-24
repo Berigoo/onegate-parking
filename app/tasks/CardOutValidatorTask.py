@@ -49,6 +49,11 @@ class CardValidatorOut:
         if self.serial is None:
             self.serial_reconnect()
         if self.serial.in_waiting > 0:
+            event = StateEvent(
+                        type=EventType.CARD_TAP,
+                        payload=None
+                    )
+            self.queue.put(event)
             raw_data = self.serial.readline()
             try:
                 if raw_data:
@@ -91,7 +96,7 @@ class CardValidatorOut:
 
     def __validate(self, data):
         try:
-            conn = mariadb.connect(self.db)
+            conn = mariadb.connect(**self.db)
             cursor = conn.cursor()
 
             # Check if uid or number exists

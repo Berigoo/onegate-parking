@@ -12,7 +12,7 @@ class SerialDataProcessing(SystemState):
         self.context.timer_mgr.start(STATE_TIMEOUT, {"issuer": type(self).__name__})
         
     def execute(self):
-        self.__check_or_create()
+        # self.__check_or_create()
         ev = self.context.current_event.type
         
         match ev:
