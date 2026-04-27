@@ -6,10 +6,13 @@ from typing import Callable
 from app.core import SessionQueue, Logger, DisplayManager
 from app.domain import StateEvent, EventType
 
+_HOST = "0.0.0.0"
+_PORT = 8080
+
 class APIService:
     def __init__(self, queue_to_push: SessionQueue):
         self.app = Flask(__name__)
-        self.socketio = SocketIO(self.app, cors_allowed_origins=["http://127.0.0.1:8000"])
+        self.socketio = SocketIO(self.app, cors_allowed_origins=["*"])
         self.queue = queue_to_push
         self.register_sessions = {}
         self.running = False

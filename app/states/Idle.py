@@ -13,6 +13,8 @@ class Idle(SystemState):
                 self.context.set_state("AddingToQueue")
             case EventType.VEHICLE_DETECTED:
                 self.context.set_state("WaitingForEmoneyTap")
+            case EventType.CARD_REGISTER:
+                self.context.set_state("Registering")
             case EventType.ASKING_FOR_SHUTDOWN:
                 self.context.shutdown()
         

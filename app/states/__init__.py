@@ -7,6 +7,7 @@ from .WaitingForEmoneyTap import WaitingForEmoneyTap
 from .WaitingForVehicleGone import WaitingForVehicleGone
 from .AddingToQueue import AddingToQueue
 from .CheckingForQueue import CheckingForQueue
+from .Registering import Registering
 
 STATE_MAP = {
     "Idle": Idle,
@@ -17,7 +18,8 @@ STATE_MAP = {
     "WaitingForEmoneyTap": WaitingForEmoneyTap,
     "WaitingForVehicleGone": WaitingForVehicleGone,
     "AddingToQueue": AddingToQueue,
-    "CheckingForQueue": CheckingForQueue
+    "CheckingForQueue": CheckingForQueue,
+    "Registering": Registering
 }
 
 __all__ = ['STATE_MAP']
