@@ -42,6 +42,7 @@ class CardValidatorIn:
         self.__setup()
         while self.running:
             self.__loop()
+            time.sleep(0.01)
     ####################
 
     #################### Task Logic
