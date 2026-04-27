@@ -14,9 +14,9 @@ class Registering(SystemState):
             case EventType.CARD_IN_VALID:
                 self.context.timer_mgr.stop()
                 uid = self.context.current_event.payload["uid"]
-                self.api_service.emit_uid(self.session_id, uid)
+                self.context.api_service.emit_uid(self.session_id, uid)
                 self.context.set_context("Idle")
             case EventType.GENERIC_TIMEOUT:
-                self.api_service.emit_uid(self.session_id, -1)
+                self.context.api_service.emit_uid(self.session_id, -1)
                 self.context.set_context("Idle")
                 
