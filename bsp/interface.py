@@ -6,6 +6,9 @@ class BSPInterface(ABC):
     def bsp_init(self) -> None: ...
 
     @abstractmethod
+    def bsp_deinit(self) -> None: ...
+    
+    @abstractmethod
     def bsp_read_vld_in(self) -> bool: ...
 
     @abstractmethod
@@ -35,6 +38,8 @@ class BSP:
         self._impl = impl
     def bsp_init(self):
         self._impl.bsp_init()
+    def bsp_init(self):
+        self._impl.bsp_deinit()
     def bsp_read_vld_in(self):
         return self._impl.bsp_read_vld_in() == 1
     def bsp_read_intercom(self):

@@ -13,6 +13,9 @@ def init_gpio():
     GPIO.setup(config.PIN_BOOM_GATE_HIGH, GPIO.OUT, initial=GPIO.HIGH)
     GPIO.setup(config.PIN_BOOM_GATE_LOW, GPIO.OUT, initial=GPIO.HIGH)
 
+def deinit_gpio():
+    GPIO.cleanup()
+    
 def read_vld_in():      # read in vld state
     return GPIO.input(config.PIN_IN_VLD)
     

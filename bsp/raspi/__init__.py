@@ -4,6 +4,9 @@ from . import gpio
 class BSPRaspi(BSPInterface):
     def bsp_init(self):
         gpio.init_gpio()
+
+    def bsp_deinit(self):
+        gpio.deinit_gpio()
         
     def bsp_read_vld_in(self):
         return gpio.read_vld_in()
