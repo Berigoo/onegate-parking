@@ -1,5 +1,7 @@
 import cv2
-from app.tasks import VLDMonitor, CardValidatorIn, CardValidatorOut, IntercomRelayMonitor, CameraMonitor, GateController, TimerManager, DisplayWorker
+import sys
+import time
+from app.tasks import VLDMonitor, CardValidatorIn, CardValidatorOut, IntercomRelayMonitor, CameraMonitor, GateController, TimerManager, DisplayWorker, APIService
 from app.core import SessionQueue, SystemStateContext, DisplayManager
 from app.states import Idle
 from bsp import bsp
@@ -34,12 +36,14 @@ class Application:
         self.intercom_relay = IntercomRelayMonitor(self.events_queue)
         self.gate_ctrl = GateController()
         self.timer_mgr = TimerManager(self.events_queue)
+        self.api_service = APIService(self.events_queue)
         
         # Start monitor services
         self.vld_monitor.start()
         self.card_validator_in.start()
         self.card_validator_out.start()
         self.intercom_relay.start()
+        self.api_service.start()
 
         # Camera workers and manager
         self.dm = DisplayManager()
@@ -52,17 +56,29 @@ class Application:
         self.dm.set_text(TextType.WELCOME)
 
         # Initialize state machine context
-        self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr, self.sessions_queue, self.dm)
+        self.ctx = SystemStateContext("Idle", self.vld_monitor, self.card_validator_in, self.card_validator_out, self.intercom_relay, self.camera, self.gate_ctrl, self.timer_mgr, self.sessions_queue, self.dm, self.api_service, self.stop)
         
     def __loop(self):
         ev = self.events_queue.get()
         self.ctx.do(ev)
-        True
 
     def start(self):
         self.is_running = True
         self.__setup()
         while self.is_running:
             self.__loop()
-        
-        
+
+    def stop(self):
+        self.is_running = False
+        self.timer_mgr.stop()
+        self.dw.stop()
+        self.camera.stop()
+        self.vld_monitor.stop()
+        self.card_validator_in.stop()
+        self.card_validator_out.stop()
+        self.intercom_relay.stop()
+        self.api_service.stop()
+        self.gate_ctrl.close()
+        time.sleep(3)
+        sys.exit(0)
+
