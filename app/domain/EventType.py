@@ -9,5 +9,6 @@ class EventType(Enum):
     VEHICLE_GONE = "vehicle_gone"
     INTERCOM_OVERRIDE = "intercom_override"
     ASKING_FOR_SHUTDOWN = "asking_for_shutdown"
+    CARD_REGISTER = "card_register"
 
 
