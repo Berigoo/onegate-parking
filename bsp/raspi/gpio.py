@@ -6,8 +6,8 @@ def init_gpio():
     GPIO.setmode(GPIO.BCM)
     
     # input devices
-    GPIO.setup(config.PIN_IN_VLD, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.setup(config.PIN_IN_INTERCOM_RELAY1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(config.PIN_IN_VLD, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(config.PIN_IN_INTERCOM_RELAY1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         
     # output device
     GPIO.setup(config.PIN_BOOM_GATE_HIGH, GPIO.OUT, initial=GPIO.HIGH)
@@ -29,7 +29,7 @@ def write_boom_gate(state):
         
 def write_boom_gate_hold():
     GPIO.output(config.PIN_BOOM_GATE_HIGH, GPIO.HIGH)
-    GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.HIGH)
+    GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.LOW)
 
 def on_vld_in_high(cb): # execute 'cb' when in vld is HIGH
     GPIO.add_event_detect(config.PIN_IN_VLD, GPIO.RISING, callback=cb, bouncetime=2000)
