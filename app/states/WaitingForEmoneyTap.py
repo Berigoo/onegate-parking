@@ -13,10 +13,10 @@ class WaitingForEmoneyTap(SystemState):
         ev = self.context.current_event.type
         match ev:
             case EventType.CARD_TAP:
-                self.context.timer_mgr.cancel()
+                self.context.timer_mgr.stop()
                 self.context.set_state("SerialDataProcessing")
             case EventType.INTERCOM_OVERRIDE:
-                self.context.timer_mgr.cancel()
+                self.context.timer_mgr.stop()
                 self.context.set_state("AddingToQueue")
             case EventType.GENERIC_TIMEOUT:
                 self.context.set_state("Idle")
