@@ -78,12 +78,7 @@ class APIService:
 
     def emit_uid(self, session_id, uid):
         sid = self.register_sessions.get(session_id)
-        if session_id == -1:    # due to TIMEOUT
-            if sid:
-                del self.register_sessions[session_id]
-            return
-        
-        if sid:
+        if sid:                 # timeout will return -1
             self.socketio.emit(
                 "register_result",
                 {"session_id": session_id, "uid": uid},

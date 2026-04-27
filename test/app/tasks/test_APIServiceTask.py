@@ -1,6 +1,6 @@
 import pytest
 from flask_socketio import SocketIOTestClient
-from app.tasks.APIServiceTask import APIService
+from app.tasks import APIService
 from app.core.SessionQueue import SessionQueue
 
 @pytest.fixture
@@ -23,9 +23,6 @@ def socket_client(api_service):
     return service.socketio.test_client(service.app)
 
 
-# ---------------------------
-# HTTP TEST
-# ---------------------------
 def test_register_start(client, api_service):
     service, queue = api_service
     service.running = True
@@ -37,10 +34,6 @@ def test_register_start(client, api_service):
     assert "session_id" in data
     assert queue.qsize() == 1
 
-
-# ---------------------------
-# WS SUBSCRIBE TEST
-# ---------------------------
 def test_register_subscribe(socket_client, api_service):
     service, _ = api_service
 
@@ -53,10 +46,6 @@ def test_register_subscribe(socket_client, api_service):
     # check mapping stored
     assert session_id in service.register_sessions
 
-
-# ---------------------------
-# EMIT UID TEST
-# ---------------------------
 def test_emit_uid(socket_client, api_service):
     service, _ = api_service
 
@@ -81,10 +70,6 @@ def test_emit_uid(socket_client, api_service):
     # ensure cleanup
     assert session_id not in service.register_sessions
 
-
-# ---------------------------
-# TIMEOUT CASE TEST
-# ---------------------------
 def test_emit_uid_timeout(socket_client, api_service):
     service, _ = api_service
 
@@ -94,9 +79,10 @@ def test_emit_uid_timeout(socket_client, api_service):
         "session_id": session_id
     })
 
-    # simulate timeout
-    service.emit_uid(-1, None)
-
-    # ensure no crash and no emit
+    service.emit_uid("test-session", -1)
     received = socket_client.get_received()
-    assert received == []
+
+    assert len(received) > 0
+    event = received[0]
+    assert event["name"] == "register_result"
+    assert event["args"][0]["uid"] == -1
