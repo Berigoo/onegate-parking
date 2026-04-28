@@ -147,7 +147,7 @@ class CardValidatorIn:
             else:
                 self.logger.warning(f"Card not found: uid={data['uid']}")
 
-            return result
+            return is_valid
         except Exception as e:
             self.logger.error(f"Database error during validation: {e}")
             return False
