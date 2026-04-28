@@ -77,27 +77,45 @@ class CardValidatorIn:
                 except Exception as e:
                     self.logger.warning("Kartu tidak valid atau sistem gagal")
 
+    
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:
             return None
         try:
-            data = raw_data[3:-1].hex()  # assume first 3 bytes is a metadata, and last byte is a terminator
-            card_types = data[:2]
-            card_uid = data[2:2+14]
-            card_val = data[16:16+2]
-            card_num = data[18:18+16]
-            balance = data[34:34+8]
+            payload = raw_data[3:-1]
+            if len(payload) < 21:
+                self.logger.debug("Payload too short after trimming")
+                return None
+
+            # byte slicing (clean & aligned with protocol)
+            offset = 0
+
+            card_type = payload[offset:offset+1]
+            offset += 1
+
+            card_uid = payload[offset:offset+7]
+            offset += 7
+
+            validity = payload[offset:offset+1]
+            offset += 1
+
+            card_number = payload[offset:offset+8]
+            offset += 8
+
+            balance = payload[offset:offset+4]
+
             return {
-                "types": (card_types),
-                "uid": (card_uid),
-                "validity": (card_val),
-                "number": (card_num),
-                "balance": (balance),
-                "card_info": data
+                "types": card_type.hex(),
+                "uid": card_uid.hex(),
+                "validity": validity.hex(),
+                "number": card_number.hex(),
+                "balance": balance.hex(),
+                "card_info": payload.hex()
             }
+        
         except Exception as e:
             self.logger.debug(f"Parse error: {e}")
-        return None
+            return None
 
     def __validate(self, data):
         try:
