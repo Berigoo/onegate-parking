@@ -68,8 +68,10 @@ class CardValidatorIn:
                         obj = {
                             "uid": data["uid"],
                             "number": data["number"],
-                            "is_valid": is_valid
+                            "is_valid": is_valid,
                         }
+                        if is_valid:
+                            obj["name"] = data["name"]
                         event = StateEvent(
                             type=EventType.CARD_IN_VALID,
                             payload=obj

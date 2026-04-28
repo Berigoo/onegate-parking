@@ -33,20 +33,22 @@ class SerialDataProcessing(SystemState):
             case EventType.CARD_IN_VALID:
                 self.context.timer_mgr.stop()
                 if self.context.current_event.payload["is_valid"]:
-                    uid = self.context.current_event.payload["uid"]
-                    conn = sqlite3.connect(ENTERED_USERS_DB)
-                    cursor = conn.cursor()
-                    cursor.execute(
-                        "SELECT 1 FROM entered_users WHERE uid=?",
-                        (uid, )
-                    )
-                    row = cursor.fetchone()
-                    conn.close()
+                    # uid = self.context.current_event.payload["uid"]
+                    # conn = sqlite3.connect(ENTERED_USERS_DB)
+                    # cursor = conn.cursor()
+                    # cursor.execute(
+                    #     "SELECT 1 FROM entered_users WHERE uid=?",
+                    #     (uid, )
+                    # )
+                    # row = cursor.fetchone()
+                    # conn.close()
                     
-                    if row is not None:
-                        self.context.set_state("Idle") # user already entered
-                    else:
-                        self.context.set_state("AddingToQueue")
+                    # if row is not None:
+                    #     self.context.set_state("Idle") # user already entered
+                    # else:
+                    #     self.context.set_state("AddingToQueue")
+
+                    self.context.set_state("AddingToQueue")
                     
                 else:
                     # TODO info message, and maybe add sleep, so it can be rendered for n sec
@@ -71,3 +73,7 @@ class SerialDataProcessing(SystemState):
             case EventType.GENERIC_TIMEOUT:
                 self.context.timer_mgr.stop()
                 self.context.set_state("Idle")
+
+
+            case EventType.CARD_OUT_TAP: # TODO rm
+                self.context.set_state("AddingToQueue")

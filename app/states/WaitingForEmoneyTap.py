@@ -12,7 +12,7 @@ class WaitingForEmoneyTap(SystemState):
     def execute(self):
         ev = self.context.current_event.type
         match ev:
-            case EventType.CARD_TAP:
+            case EventType.CARD_IN_TAP || EventType.CARD_OUT_TAP:
                 self.context.timer_mgr.stop()
                 self.context.set_state("SerialDataProcessing")
             case EventType.INTERCOM_OVERRIDE:

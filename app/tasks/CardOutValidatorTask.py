@@ -68,8 +68,10 @@ class CardValidatorOut:
                         obj = {
                             "uid": data["uid"],
                             "number": data["number"],
-                            "is_valid": is_valid
+                            "is_valid": is_valid,
                         }
+                        if is_valid:
+                            obj["name"] = data["name"]
                         event = StateEvent(
                             type=EventType.CARD_OUT_VALID,
                             payload=obj
@@ -139,6 +141,9 @@ class CardValidatorOut:
                 (data["number"],)
             )
             result = cursor.fetchone()
+            print(result)
+            print(result["nama"])
+            print(data["number"])
             is_valid = result is not None
             conn.close()
 
