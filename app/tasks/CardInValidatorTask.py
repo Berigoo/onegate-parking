@@ -113,7 +113,7 @@ class CardValidatorIn:
             conn.close()
 
             if result:
-                data["name"] = result["nama"] # name supplied when valid
+                # data["name"] = result["nama"] # name supplied when valid
                 self.logger.info(f"Card valid: uid={data['uid']}")
             else:
                 self.logger.warning(f"Card not found: uid={data['uid']}")
