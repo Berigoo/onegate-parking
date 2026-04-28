@@ -26,9 +26,14 @@ class DisplayWorker:
         self.thread.start()
 
     def _run(self):
-        self.dm = DisplayManager()
         cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
-        cv2.setWindowProperty(WINDOW_NAME, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+        cv2.imshow(WINDOW_NAME, np.zeros((100,100,3), dtype=np.uint8))
+        cv2.setWindowProperty(
+            WINDOW_NAME,
+            cv2.WND_PROP_FULLSCREEN,
+            cv2.WINDOW_FULLSCREEN
+        )
+        self.dm = DisplayManager()
         while self.running:
             cv2.imshow(self.window_name, self.frame_queue.get())
             if cv2.waitKey(1) & 0xFF == ord('q'):
