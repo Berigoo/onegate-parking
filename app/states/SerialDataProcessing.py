@@ -10,7 +10,21 @@ class SerialDataProcessing(SystemState):
     def init(self):
         # TODO info message
         self.context.timer_mgr.start(STATE_TIMEOUT, {"issuer": type(self).__name__})
-        
+
+    def __check_or_create(self):
+        conn = sqlite3.connect(ENTERED_USERS_DB)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+                CREATE TABLE IF NOT EXISTS entered_users (
+                timestamp TIMESTAMP,
+                uid TEXT,
+                )
+            """)
+
+        conn.commit()
+        conn.close()
+            
     def execute(self):
         self.__check_or_create()
         ev = self.context.current_event.type
@@ -56,18 +70,3 @@ class SerialDataProcessing(SystemState):
                 self.context.set_state("AddingToQueue")
             case EventType.GENERIC_TIMEOUT:
                 self.context.set_state("Idle")
-            
-    def __check_or_create(self):
-            conn = sqlite3.connect(ENTERED_USERS_DB)
-            cursor = conn.cursor()
-
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS entered_users (
-                timestamp TIMESTAMP,
-                uid TEXT,
-                )
-            """)
-
-            conn.commit()
-            conn.close()
-            
