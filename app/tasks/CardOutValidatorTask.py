@@ -86,6 +86,7 @@ class CardValidatorOut:
             if not chunk:
                 return None  # timeout or disconnected
             buffer += chunk
+            print(buffer)
         return buffer
     
     def __parse(self, raw_data):
