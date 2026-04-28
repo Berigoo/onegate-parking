@@ -140,6 +140,7 @@ class CardValidatorIn:
             )
             result = cursor.fetchone()
             print(result)
+            print(result["nama"])
             print(data["number"])
             is_valid = result is not None
             conn.close()
