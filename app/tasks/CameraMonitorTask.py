@@ -7,6 +7,7 @@ from typing import Callable
 from app.core import SessionQueue, Logger, DisplayManager
 from app.domain import StateEvent, EventType
 
+WINDOW_NAME = "Monitor Gate"
 CAM_RETRY_DELAY = 5
 
 class DisplayWorker:
