@@ -55,6 +55,7 @@ class CardValidatorOut:
             self.__serial_reconnect()
         else:
             if self.serial.in_waiting > 0:
+                print('out')
                 event = StateEvent(
                     type=EventType.CARD_OUT_TAP,
                     payload=None
