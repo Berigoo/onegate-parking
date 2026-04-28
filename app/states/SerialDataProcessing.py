@@ -55,7 +55,7 @@ class SerialDataProcessing(SystemState):
                     # TODO info message, and maybe add sleep, so it can be rendered for n sec
                     self.context.timer_mgr.stop()
                     self.context.dm.set_text("Kartu Invalid")
-                    self.context.dm.set_color((255, 0, 0))
+                    self.context.dm.set_color((0, 0, 255))
                     self.context.logger.warning("Card invalid")
                     time.sleep(3)
                     self.context.set_state("Idle")

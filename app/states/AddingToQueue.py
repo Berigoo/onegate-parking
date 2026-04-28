@@ -9,6 +9,9 @@ class AddingToQueue(SystemState):
         if self.context.current_event.type is EventType.CARD_OUT_TAP:
             self.context.set_state("OpeningGate")
             return
+        elif self.context.current_event.type is EventType.INTERCOM_OVERRIDE:
+            self.context.set_state("OpeningGate")
+            return
         
         name = self.context.current_event.payload["name"]
         if name is None:
