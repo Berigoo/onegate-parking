@@ -127,11 +127,12 @@ class CardValidatorIn:
                 "SELECT 1 FROM user_cards WHERE uid = ?",
                 (data["number"],)
             )
-            result = cursor.fetchone() is not None
+            result = cursor.fetchone()
+            is_valid = result is not None
             conn.close()
 
-            if result:
-                # data["name"] = result["nama"] # name supplied when valid
+            if is_valid:
+                data["name"] = result["nama"] # name supplied when valid
                 self.logger.info(f"Card valid: uid={data['uid']}")
             else:
                 self.logger.warning(f"Card not found: uid={data['uid']}")
