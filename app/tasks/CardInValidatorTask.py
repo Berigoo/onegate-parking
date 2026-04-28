@@ -51,7 +51,7 @@ class CardValidatorIn:
         self.serial = self.__serial_connect(self.port)
     def __loop(self):
         if self.serial is None:
-            self.serial_reconnect()
+            self.__serial_reconnect()
         if self.serial.in_waiting > 0:
             event = StateEvent(
                         type=EventType.CARD_TAP,
