@@ -52,29 +52,30 @@ class CardValidatorIn:
     def __loop(self):
         if self.serial is None:
             self.__serial_reconnect()
-        if self.serial.in_waiting > 0:
-            event = StateEvent(
-                        type=EventType.CARD_TAP,
-                        payload=None
-                    )
-            self.queue.put(event)
-            raw_data = self.serial.readline()
-            try:
-                if raw_data:
-                    data = self.__parse(raw_data)
-                    is_valid = self.__validate(data)
-                    obj = {
-                        "uid": data["uid"],
-                        "number": data["number"],
-                        "is_valid": is_valid
-                    }
-                    event = StateEvent(
-                        type=EventType.CARD_IN_VALID,
-                        payload=obj
-                    )
-                    self.queue.put(event)
-            except Exception as e:
-                self.logger.warning("Kartu tidak valid atau sistem gagal")
+        else:
+            if self.serial.in_waiting > 0:
+                event = StateEvent(
+                    type=EventType.CARD_TAP,
+                    payload=None
+                )
+                self.queue.put(event)
+                raw_data = self.serial.readline()
+                try:
+                    if raw_data:
+                        data = self.__parse(raw_data)
+                        is_valid = self.__validate(data)
+                        obj = {
+                            "uid": data["uid"],
+                            "number": data["number"],
+                            "is_valid": is_valid
+                        }
+                        event = StateEvent(
+                            type=EventType.CARD_IN_VALID,
+                            payload=obj
+                        )
+                        self.queue.put(event)
+                except Exception as e:
+                    self.logger.warning("Kartu tidak valid atau sistem gagal")
 
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:
