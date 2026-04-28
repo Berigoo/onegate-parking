@@ -44,7 +44,7 @@ class BSP:
         self._impl.bsp_deinit()
 
     def bsp_read_vld_in(self):
-        return bool(self._impl.bsp_read_vld_in())
+        return bool(self._impl.bsp_read_vld_in()) == False
 
     def bsp_read_intercom(self):
         return bool(self._impl.bsp_read_intercom())
