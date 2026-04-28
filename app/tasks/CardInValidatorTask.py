@@ -8,6 +8,7 @@ from app.core import SessionQueue, Logger
 
 # Expected length of a card data payload (heuristic used by parser)
 CARD_DATA_LEN = 21
+FRAME_LEN = CARD_DATA_LEN + 4
 USERS_DB=os.getenv('USERS_DB')
 DB_CONF = {
     "host": "127.0.0.1",
@@ -59,7 +60,7 @@ class CardValidatorIn:
                     payload=None
                 )
                 self.queue.put(event)
-                raw_data = self.serial.readline()
+                raw_data = self.__read_exact(FRAME_LEN)
                 try:
                     if raw_data:
                         data = self.__parse(raw_data)
@@ -77,6 +78,15 @@ class CardValidatorIn:
                 except Exception as e:
                     self.logger.warning("Kartu tidak valid atau sistem gagal")
 
+    
+    def __read_exact(self, size):
+        buffer = b""
+        while len(buffer) < size:
+            chunk = self.serial.read(size - len(buffer))
+            if not chunk:
+                return None  # timeout or disconnected
+            buffer += chunk
+        return buffer
     
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:
