@@ -15,6 +15,7 @@ class GateController:
         self.logger = Logger("Gate Controller")
         self.is_holding  = False
         self.state: GateState = GateState.GATE_CLOSING
+        self.close()
 
     #################### threading methods
     # def start(self):
