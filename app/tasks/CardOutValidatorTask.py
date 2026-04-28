@@ -1,12 +1,14 @@
-import time
-import os
 import serial
 import threading
 import mariadb
+import time
+import os
 from app.domain import StateEvent, EventType
 from app.core import SessionQueue, Logger
 
-CARD_DATA_LEN=21
+# Expected length of a card data payload (heuristic used by parser)
+CARD_DATA_LEN = 21
+FRAME_LEN = CARD_DATA_LEN + 4
 USERS_DB=os.getenv('USERS_DB')
 DB_CONF = {
     "host": "127.0.0.1",
@@ -46,6 +48,7 @@ class CardValidatorOut:
 
     #################### Task Logic
     def __setup(self):
+        # Attempt to connect to the serial device; keep self.serial in a valid state
         self.serial = self.__serial_connect(self.port)
     def __loop(self):
         if self.serial is None:
@@ -57,7 +60,7 @@ class CardValidatorOut:
                     payload=None
                 )
                 self.queue.put(event)
-                raw_data = self.serial.readline()
+                raw_data = self.__read_exact(FRAME_LEN)
                 try:
                     if raw_data:
                         data = self.__parse(raw_data)
@@ -75,62 +78,99 @@ class CardValidatorOut:
                 except Exception as e:
                     self.logger.warning("Kartu tidak valid atau sistem gagal")
 
+    
+    def __read_exact(self, size):
+        buffer = b""
+        while len(buffer) < size:
+            chunk = self.serial.read(size - len(buffer))
+            if not chunk:
+                return None  # timeout or disconnected
+            buffer += chunk
+        return buffer
+    
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:
             return None
         try:
-            data = raw_data[3:-1].hex() # assume first 3 bytes is a metadata, and last byte is a terminator
-            card_types = data[:2]
-            card_uid = data[2:2+14]
-            card_val = data[16:16+2]
-            card_num = data[18:18+16]
-            balance = data[34:34+8]
+            payload = raw_data[3:-1]
+            if len(payload) < 21:
+                self.logger.debug("Payload too short after trimming")
+                return None
+
+            # byte slicing (clean & aligned with protocol)
+            offset = 0
+
+            card_type = payload[offset:offset+1]
+            offset += 1
+
+            card_uid = payload[offset:offset+7]
+            offset += 7
+
+            validity = payload[offset:offset+1]
+            offset += 1
+
+            card_number = payload[offset:offset+8]
+            offset += 8
+
+            balance = payload[offset:offset+4]
+
             return {
-                "types":(card_types),
-                "uid":(card_uid),
-                "validity":(card_val),
-                "number":(card_num),
-                "balance":(balance),
-                "card_info":data
+                "types": card_type.hex(),
+                "uid": card_uid.hex(),
+                "validity": validity.hex(),
+                "number": card_number.hex(),
+                "balance": balance.hex(),
+                "card_info": payload.hex()
             }
+        
         except Exception as e:
             self.logger.debug(f"Parse error: {e}")
-        return None
+            return None
 
     def __validate(self, data):
         try:
             conn = mariadb.connect(**self.db)
-            cursor = conn.cursor()
+            cursor = conn.cursor(dictionary=True)
 
             # Check if uid or number exists
             cursor.execute(
                 "SELECT 1 FROM user_cards WHERE uid = ?",
                 (data["number"],)
             )
-            result = cursor.fetchone() is not None
+            result = cursor.fetchone()
+            is_valid = result is not None
             conn.close()
 
-            if result:
+            if is_valid:
+                data["name"] = result["nama"] # name supplied when valid
                 self.logger.info(f"Card valid: uid={data['uid']}")
             else:
                 self.logger.warning(f"Card not found: uid={data['uid']}")
 
             return result
         except Exception as e:
-            self.logger.error("Database error during validation")
+            self.logger.error(f"Database error during validation: {e}")
             return False
         
     def __serial_connect(self, port):
-        while self.serial is None:
+        retries = 5
+        while retries > 0:
             try:
-                self.serial = serial.Serial(
+                ser = serial.Serial(
                     port=port,
-                    baudrate=9600,        
+                    baudrate=9600,
                     parity=serial.PARITY_NONE,
                     stopbits=serial.STOPBITS_ONE,
-                    bytesize=serial.EIGHTBITS)
+                    bytesize=serial.EIGHTBITS,
+                    timeout=1,
+                )
+                return ser
             except serial.SerialException as e:
-                self.logger.warning("Failed to connect to serial. retyring...")
+                self.logger.warning(f"Failed to connect to serial. retrying...: {e}")
+                retries -= 1
+                time.sleep(0.2)
+        return None
+
     def __serial_reconnect(self):
-        self.__serial_connect(self.port)
+        self.serial = self.__serial_connect(self.port)
         ####################
