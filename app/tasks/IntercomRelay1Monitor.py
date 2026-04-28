@@ -32,15 +32,15 @@ class IntercomRelayMonitor:
 
     #################### Task Logic
     def __setup(self):
-        bsp.bsp_on_intercom_relay_high(self.__when_intercom_relay_high)
+        # bsp.bsp_on_intercom_relay_high(self.__when_intercom_relay_high)
         pass
         
     def __loop(self):
-        # ret = bsp.bsp_read_intercom()
-        # if self.last_state is False and ret is True:
-        #     self.__when_intercom_relay_high()
-        #     time.sleep(2)       # TODO proper debouncing
-        # self.last_state = ret
+        ret = bsp.bsp_read_intercom()
+        if self.last_state is False and ret is True:
+            self.__when_intercom_relay_high()
+            time.sleep(2)       # TODO proper debouncing
+        self.last_state = ret
         pass
 
     def __when_intercom_relay_high(self):
