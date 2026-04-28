@@ -24,8 +24,8 @@ def init_gpio():
     # GPIO.setup(config.PIN_BOOM_GATE_HIGH, GPIO.OUT, initial=GPIO.HIGH)
     # GPIO.setup(config.PIN_BOOM_GATE_LOW, GPIO.OUT, initial=GPIO.HIGH)
 
-    _VLD = gpiozero.DigitalInputDevice(config.PIN_IN_VLD, pull_up=True, active_state=False, bounce_time=2)
-    _INTERCOM = gpiozero.DigitalInputDevice(config.PIN_IN_INTERCOM_RELAY1, pull_up=True, active_state=False, bounce_time=2)
+    _VLD = gpiozero.DigitalInputDevice(config.PIN_IN_VLD, pull_up=True, bounce_time=2)
+    _INTERCOM = gpiozero.DigitalInputDevice(config.PIN_IN_INTERCOM_RELAY1, pull_up=True, bounce_time=2)
 
     _GATE_HIGH = gpiozero.DigitalOutputDevice(config.PIN_BOOM_GATE_HIGH, active_high=True, initial_value=False)
     _GATE_LOW = gpiozero.DigitalOutputDevice(config.PIN_BOOM_GATE_LOW, active_high=True, initial_value=True)
