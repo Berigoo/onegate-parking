@@ -58,16 +58,16 @@ class SerialDataProcessing(SystemState):
                 self.context.set_state("Idle")
             
     def __check_or_create(self):
-        conn = sqlite3.connect(ENTERED_USERS_DB)
-        cursor = conn.cursor()
+            conn = sqlite3.connect(ENTERED_USERS_DB)
+            cursor = conn.cursor()
 
-        cursor.execute("""
-              CREATE TABLE IF NOT EXISTS entered_users (
-               timestamp TIMESTAMP,
-               uid TEXT,
-              )
-        """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS entered_users (
+                timestamp TIMESTAMP,
+                uid TEXT,
+                )
+            """)
 
-        conn.commit()
-        conn.close()
+            conn.commit()
+            conn.close()
             
