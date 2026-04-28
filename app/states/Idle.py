@@ -3,7 +3,7 @@ from app.domain import EventType, TextType
 
 class Idle(SystemState):
     def init(self):
-        self.context.dm.set_text(TextType.WELCOME)
+        self.context.dm.set_text("Silakan Tap Kartu")
     def execute(self):
         ev = self.context.current_event.type
         match ev:

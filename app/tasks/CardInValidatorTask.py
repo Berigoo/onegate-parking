@@ -102,7 +102,7 @@ class CardValidatorIn:
     def __validate(self, data):
         try:
             conn = mariadb.connect(**self.db)
-            cursor = conn.cursor()
+            cursor = conn.cursor(dictionary=True)
 
             # Check if uid or number exists
             cursor.execute(
@@ -113,6 +113,7 @@ class CardValidatorIn:
             conn.close()
 
             if result:
+                data["name"] = result["nama"] # name supplied when valid
                 self.logger.info(f"Card valid: uid={data['uid']}")
             else:
                 self.logger.warning(f"Card not found: uid={data['uid']}")
