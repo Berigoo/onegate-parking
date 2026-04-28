@@ -31,13 +31,12 @@ class DisplayManager:           # A singleton class
         self.current_color = (0, 255, 0)
 
         cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
-        cv2.imshow(WINDOW_NAME, np.zeros((100,100,3), dtype=np.uint8))
 
-        cv2.setWindowProperty(
-            WINDOW_NAME,
-            cv2.WND_PROP_FULLSCREEN,
-            cv2.WINDOW_FULLSCREEN
-        )
+        # cv2.setWindowProperty(
+        #     WINDOW_NAME,
+        #     cv2.WND_PROP_FULLSCREEN,
+        #     cv2.WINDOW_FULLSCREEN
+        # )
         # cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL)
         # cv2.setWindowProperty(WINDOW_NAME, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
