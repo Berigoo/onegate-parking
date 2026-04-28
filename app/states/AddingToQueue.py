@@ -8,6 +8,7 @@ class AddingToQueue(SystemState):
         # tmp
         if self.context.current_event.type is EventType.CARD_OUT_TAP:
             self.context.set_state("OpeningGate")
+            return
         
         name = self.context.current_event.payload["name"]
         if name is None:
