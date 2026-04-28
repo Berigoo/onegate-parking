@@ -26,6 +26,7 @@ class SystemStateContext:
 
     def set_state(self, state):
         self.logger.debug(f"Context: Transitioning to {state}")
+        print(state)
         self._state = STATE_MAP[state]() # TODO check
         self._state.context = self
         self._state.init()
