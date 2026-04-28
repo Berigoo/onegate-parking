@@ -1,4 +1,8 @@
 from . import config
+from gpiozero import Device
+from gpiozero.pins.lgpio import LGPIOFactory
+Device.pin_factory = LGPIOFactory()
+
 import gpiozero
 # import RPi.GPIO as GPIO
 import time
