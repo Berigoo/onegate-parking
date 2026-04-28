@@ -8,7 +8,7 @@ from app.core import SessionQueue, Logger
 
 # Expected length of a card data payload (heuristic used by parser)
 CARD_DATA_LEN = 21
-FRAME_LEN = CARD_DATA_LEN + 4
+FRAME_LEN = CARD_DATA_LEN
 USERS_DB=os.getenv('USERS_DB')
 DB_CONF = {
     "host": "127.0.0.1",
