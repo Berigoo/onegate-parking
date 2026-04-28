@@ -23,7 +23,7 @@ class WaitingForVehicleGone(SystemState):
                     self.context.timer_mgr.stop()
                     print('checking for queue')
                     self.context.set_state("CheckingForQueue")
-            case EventType.CARD_IN_TAP || EventType.CARD_OUT_TAP:
+            case EventType.CARD_IN_TAP | EventType.CARD_OUT_TAP:
                 self.context.set_state("SerialDataProcessing")
             case EventType.GENERIC_TIMEOUT:
                 self.context.set_state("ClosingGate")
