@@ -69,4 +69,5 @@ class SerialDataProcessing(SystemState):
                 self.context.timer_mgr.stop()
                 self.context.set_state("AddingToQueue")
             case EventType.GENERIC_TIMEOUT:
+                self.context.timer_mgr.stop()
                 self.context.set_state("Idle")
