@@ -1,4 +1,5 @@
 import os
+import time
 import sqlite3
 from app.core import SystemState
 from app.domain import EventType
@@ -53,7 +54,10 @@ class SerialDataProcessing(SystemState):
                 else:
                     # TODO info message, and maybe add sleep, so it can be rendered for n sec
                     self.context.timer_mgr.stop()
+                    self.context.dm.set_text("Kartu Invalid")
+                    self.context.dm.set_color((255, 0, 0))
                     self.context.logger.warning("Card invalid")
+                    time.sleep(3)
                     self.context.set_state("Idle")
 
             case EventType.CARD_OUT_VALID:
