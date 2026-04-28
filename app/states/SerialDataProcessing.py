@@ -18,7 +18,7 @@ class SerialDataProcessing(SystemState):
         cursor.execute("""
                 CREATE TABLE IF NOT EXISTS entered_users (
                 timestamp TIMESTAMP,
-                uid TEXT,
+                uid TEXT
                 )
             """)
 
