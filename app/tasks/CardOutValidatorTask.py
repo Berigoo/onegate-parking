@@ -23,7 +23,7 @@ class CardValidatorOut:
         self.serial = None
         self.running = False
         self.thread = None
-        self.logger = Logger("CardValidatorIn")
+        self.logger = Logger("CardValidatorOut")
 
     #################### threading methods
     def start(self):
@@ -71,7 +71,7 @@ class CardValidatorOut:
                     )
                     self.queue.put(event)
             except Exception as e:
-                self.logger.warning("Kartu tidak valid atau sistem gagal", e)
+                self.logger.warning("Kartu tidak valid atau sistem gagal")
 
     def __parse(self, raw_data):
         if raw_data is None or len(raw_data) < CARD_DATA_LEN:
@@ -115,7 +115,7 @@ class CardValidatorOut:
 
             return result
         except Exception as e:
-            self.logger.error("Database error during validation", e)
+            self.logger.error("Database error during validation")
             return False
         
     def __serial_connect(self, port):
@@ -128,7 +128,7 @@ class CardValidatorOut:
                     stopbits=serial.STOPBITS_ONE,
                     bytesize=serial.EIGHTBITS)
             except serial.SerialException as e:
-                self.logger.warning("Failed to connect to serial. retyring...", e)
+                self.logger.warning("Failed to connect to serial. retyring...")
     def __serial_reconnect(self):
         self.__serial_connect(self.port)
         ####################
