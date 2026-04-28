@@ -105,7 +105,7 @@ class CardValidatorOut:
             # Check if uid or number exists
             cursor.execute(
                 "SELECT 1 FROM user_cards WHERE uid = ?",
-                (data["uid"],)
+                (data["number"],)
             )
             result = cursor.fetchone() is not None
             conn.close()
