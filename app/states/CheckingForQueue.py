@@ -8,8 +8,10 @@ ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
 
 class CheckingForQueue(SystemState):
     def init(self):
-        ev = self.context.sessions_queue.get() # guarantee CARD_IN_VALID or CARD_OUT_VALID or INTERCOM_OVERRIDE
+        ev = self.context.sessions_queue.get() # guarantee CARD_IN_VALID or CARD_OUT_VALID or INTERCOM_OVERRIDE. tmp: CARD_OUT_TAP
         if ev.type is EventType.INTERCOM_OVERRIDE: # pass special access
+            pass
+        elif ev.type is EventType.CARD_OUT_TAP:
             pass
         else:
         
