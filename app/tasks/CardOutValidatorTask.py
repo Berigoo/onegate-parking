@@ -56,7 +56,7 @@ class CardValidatorOut:
         else:
             if self.serial.in_waiting > 0:
                 event = StateEvent(
-                    type=EventType.CARD_TAP,
+                    type=EventType.CARD_OUT_TAP,
                     payload=None
                 )
                 self.queue.put(event)
