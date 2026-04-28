@@ -49,14 +49,14 @@ def write_boom_gate(state):
         # GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.LOW)
     else:
         _GATE_HIGH.off()
-        _GATE_LOW.low()
+        _GATE_LOW.on()
         # GPIO.output(config.PIN_BOOM_GATE_HIGH, GPIO.LOW)
         # GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.HIGH)
         
 def write_boom_gate_hold():
     global _GATE_HIGH, _GATE_LOW
     _GATE_HIGH.off()
-    _GATE_LOW.low()
+    _GATE_LOW.on()
     # GPIO.output(config.PIN_BOOM_GATE_HIGH, GPIO.HIGH)
     # GPIO.output(config.PIN_BOOM_GATE_LOW, GPIO.LOW)
 
