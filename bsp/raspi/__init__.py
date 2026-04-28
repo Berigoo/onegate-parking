@@ -21,7 +21,7 @@ class BSPRaspi(BSPInterface):
         gpio.on_vld_in_low(cb)
 
     def bsp_read_intercom_relay(self):
-        return gpio.read_intercom_relay1()
+        return gpio.read_intercom()
 
     def bsp_on_intercom_relay_high(self, cb):
         gpio.on_intercom_relay_high(cb)
