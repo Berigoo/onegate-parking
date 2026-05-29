@@ -106,6 +106,5 @@ class SerialDataProcessing(SystemState):
                 self.context.timer_mgr.stop()
                 self.context.set_state("Idle")
 
-
-            case EventType.CARD_OUT_TAP: # TODO rm
-                self.context.set_state("AddingToQueue")
+            # case EventType.CARD_OUT_TAP: # TODO rm
+            #     self.context.set_state("AddingToQueue")

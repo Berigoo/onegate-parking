@@ -6,10 +6,10 @@ class AddingToQueue(SystemState):
         self.context.sessions_queue.put(self.context.current_event) # guarantee CARD_IN_VALID or CARD_OUT_VALID or  INTERCOM_OVERRIDE. tmp: CARD_OUT_TAP
         
         # tmp
-        if self.context.current_event.type is EventType.CARD_OUT_TAP:
-            self.context.set_state("OpeningGate")
-            return
-        elif self.context.current_event.type is EventType.INTERCOM_OVERRIDE:
+        # if self.context.current_event.type is EventType.CARD_OUT_TAP:
+        #     self.context.set_state("OpeningGate")
+        #     return
+        if self.context.current_event.type is EventType.INTERCOM_OVERRIDE:
             self.context.set_state("OpeningGate")
             return
         
