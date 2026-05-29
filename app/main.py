@@ -33,7 +33,7 @@ class Application:
         self.events_queue = SessionQueue()
         self.sessions_queue = SessionQueue() # may invalid
         self.vld_monitor = VLDMonitor(self.events_queue)
-        self.card_validator_in = CardValidatorIn("/dev/ttyUSB0", self.events_queue)
+        self.card_validator_in = CardValidatorIn("/dev/card_reader", self.events_queue)
         self.card_validator_out = CardValidatorOut("/dev/ttyUSB2", self.events_queue)
         self.intercom_relay = IntercomRelayMonitor(self.events_queue)
         self.gate_ctrl = GateController()
