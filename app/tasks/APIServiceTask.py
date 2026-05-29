@@ -63,6 +63,41 @@ class APIService:
                 return {"session_id": session_id}, 200
             else:
                 return {"error": "system not running"}, 500
+        @self.app.route("/api/card-out-tap", methods=['POST'])
+        def card_out_tap():
+            event = StateEvent(
+                type=EventType.CARD_OUT_TAP,
+                payload=None
+            )
+            self.queue.put(event)
+            return {"success": True}, 200
+        @self.app.route("/api/card-out-valid", methods=['POST'])
+        def card_out_valid():
+            data = request.json
+            obj = {
+                "uid": data["uid"],
+                "number": data["uid"],
+                "name": data["name"]
+                "is_valid": True,
+            }
+            event = StateEvent(
+                type=EventType.CARD_OUT_VALID,
+                payload=obj
+            )
+            self.queue.put(event)
+
+            entry_id = data["uid"]
+
+            response = requests.delete(
+                f"http://localhost:8000/api/active-entries/{entry_id}",
+                headers={
+                    "Authorization": "Bearer 1|BROFIjULCvHGKq1pn1h7i0V4Z3D0CeCB2zc7qHRycca7c9bb",
+                    "Accept": "application/json"
+                },
+                timeout=5
+            )
+            
+            return {"success": True}, 200
 
     def _setup_ws(self):
         @self.socketio.on('connect')

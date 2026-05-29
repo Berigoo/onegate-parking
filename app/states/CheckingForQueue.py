@@ -8,35 +8,36 @@ ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
 
 class CheckingForQueue(SystemState):
     def init(self):
-        ev = self.context.sessions_queue.get() # guarantee CARD_IN_VALID or CARD_OUT_VALID or INTERCOM_OVERRIDE. tmp: CARD_OUT_TAP
-        if ev.type is EventType.INTERCOM_OVERRIDE: # pass special access
-            pass
-        elif ev.type is EventType.CARD_OUT_TAP:
-            pass
-        else:
+        # ev = self.context.sessions_queue.get() # guarantee CARD_IN_VALID or CARD_OUT_VALID or INTERCOM_OVERRIDE. tmp: CARD_OUT_TAP
+        # if ev.type is EventType.INTERCOM_OVERRIDE: # pass special access
+        #     pass
+        # elif ev.type is EventType.CARD_OUT_TAP:
+        #     pass
+        # else:
         
-            uid = ev.payload["uid"]
+        #     uid = ev.payload["uid"]
 
-            conn = sqlite3.connect(ENTERED_USERS_DB)
-            cursor = conn.cursor()
-            if ev.type is EventType.CARD_IN_VALID:
-                cursor.execute(
-                    "INSERT INTO entered_users (timestamp, uid) VALUES(?, ?)",
-                    (datetime.now(), uid)
-                )
-            else:
-                cursor.execute(
-                    "DELETE FROM entered_users WHERE uid=?",
-                    (uid,)
-                )
-            conn.commit()
-            conn.close()
+        #     conn = sqlite3.connect(ENTERED_USERS_DB)
+        #     cursor = conn.cursor()
+        #     if ev.type is EventType.CARD_IN_VALID:
+        #         cursor.execute(
+        #             "INSERT INTO entered_users (timestamp, uid) VALUES(?, ?)",
+        #             (datetime.now(), uid)
+        #         )
+        #     else:
+        #         cursor.execute(
+        #             "DELETE FROM entered_users WHERE uid=?",
+        #             (uid,)
+        #         )
+        #     conn.commit()
+        #     conn.close()
 
-        if self.context.sessions_queue.empty():
-            self.context.set_state("ClosingGate")
-            return
+        # if self.context.sessions_queue.empty():
+        #     self.context.set_state("ClosingGate")
+        #     return
+        self.context.set_state("ClosingGate") # tmp bypass it
 
-        self.context.set_state("WaitingForVehicleGone")
+        # self.context.set_state("WaitingForVehicleGone")
         
     def execute(self):
         pass

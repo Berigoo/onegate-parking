@@ -45,7 +45,7 @@ class Application:
         self.card_validator_in.start()
         self.card_validator_out.start()
         self.intercom_relay.start()
-        self.api_service.start()
+        # self.api_service.start()
 
         # Camera workers and manager
         self.dm = DisplayManager()
@@ -79,7 +79,7 @@ class Application:
         self.card_validator_in.stop()
         self.card_validator_out.stop()
         self.intercom_relay.stop()
-        self.api_service.stop()
+        # self.api_service.stop()
         self.gate_ctrl.close()
         time.sleep(3)
         sys.exit(0)
