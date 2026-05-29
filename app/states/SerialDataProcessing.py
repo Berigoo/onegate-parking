@@ -4,6 +4,8 @@ import sqlite3
 from app.core import SystemState
 from app.domain import EventType
 import requests
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 STATE_TIMEOUT = 15              # back to IDLE
 ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
@@ -60,11 +62,14 @@ class SerialDataProcessing(SystemState):
                         elif response.status_code == 404:
 
                             create_response = requests.post(
-                            f"{API_BASE_URL}",
-                            headers=headers,
-                            timeout=5,
-                            verify=False
-                        )
+                                f"{API_BASE_URL}",
+                                headers=headers,
+                                timeout=5,
+                                json={
+                                    "uid": uid
+                                },
+                                verify=False
+                            )
                             
                             if create_response.status_code in [200, 201]:
                                 self.context.logger.debug(f"UID added: {uid}")
