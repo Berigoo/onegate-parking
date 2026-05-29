@@ -6,7 +6,7 @@ STATE_TIMEOUT = 30              # back to IDLE
 
 class WaitingForVehicleGone(SystemState):
     def init(self):
-        self.context.timer_mgr.start(STATE_TIMEOUT * self.context.sessions_queue.qsize(), {"issuer": type(self).__name__})
+        self.context.timer_mgr.start(STATE_TIMEOUT, {"issuer": type(self).__name__})
         self.next_low_signal = True
         self.current_vld_state = self.context.vld_monitor.get_state()
 
