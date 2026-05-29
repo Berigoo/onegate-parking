@@ -16,8 +16,10 @@ class AddingToQueue(SystemState):
         name = self.context.current_event.payload["name"]
         if name is None:
             # self.context.dm.set_text("Selamat Datang")
+            pass
         else:
             # self.context.dm.set_text("Selamat Datang " + name)
+            pass
         self.context.set_state("OpeningGate")
     def execute(self):
         pass
