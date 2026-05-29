@@ -59,7 +59,7 @@ class SerialDataProcessing(SystemState):
                         # User not yet entered
                         elif response.status_code == 404:
 
-                            response2 = requests.post(
+                            create_response = requests.post(
                             f"{API_BASE_URL}",
                             headers=headers,
                             timeout=5,
