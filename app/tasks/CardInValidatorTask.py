@@ -143,7 +143,7 @@ class CardValidatorIn:
 
     def __validate(self, data):
         try:
-            uid = data["uid"]
+            uid = data["number"]
         
             response = requests.get(
                 f"{API_BASE_URL}/{uid}",
