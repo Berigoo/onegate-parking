@@ -60,7 +60,7 @@ class SerialDataProcessing(SystemState):
                             self.context.set_state("Idle")
                         # User not yet entered
                         elif response.status_code == 404:
-
+                            self.context.logger.info("creating data")
                             create_response = requests.post(
                                 f"{API_BASE_URL}",
                                 headers=headers,
@@ -104,7 +104,7 @@ class SerialDataProcessing(SystemState):
                 self.context.timer_mgr.stop()
                 if self.context.current_event.payload["is_valid"]:
                     try:
-                        self.context.logger("deleting data")
+                        self.context.logger.info("deleting data")
                         response = requests.delete(
                             f"{API_BASE_URL}/{uid}",
                             headers=headers,
