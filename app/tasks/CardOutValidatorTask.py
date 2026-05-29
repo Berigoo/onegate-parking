@@ -149,7 +149,8 @@ class CardValidatorOut:
         
             response = requests.get(
                 f"{API_BASE_URL}/{uid}",
-                headers=headers
+                headers=headers,
+                verify=False
             )
 
             if response.status_code == 404:

@@ -34,14 +34,16 @@ class CheckingForQueue(SystemState):
                         json={
                             "uid": uid
                         },
-                        headers=headers
+                        headers=headers,
+                        verify=False
                     )
 
                 else:
                     # DELETE
                     response = requests.delete(
                         f"{API_BASE_URL}/{uid}",
-                        headers=headers
+                        headers=headers,
+                        verify=False
                     )
 
                     response.raise_for_status()

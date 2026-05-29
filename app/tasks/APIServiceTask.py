@@ -98,6 +98,7 @@ class APIService:
             response = requests.delete(
                 f"http://localhost:8000/api/active-entries/{entry_id}",
                 headers=headers,
+                verify=False,
                 timeout=5
             )
             

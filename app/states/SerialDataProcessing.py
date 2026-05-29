@@ -49,7 +49,8 @@ class SerialDataProcessing(SystemState):
                         response = requests.get(
                             f"{API_BASE_URL}/{uid}",
                             headers=headers,
-                            timeout=5
+                            timeout=5,
+                            verify=False
                         )
                         # User already entered
                         if response.status_code == 200:
@@ -60,7 +61,8 @@ class SerialDataProcessing(SystemState):
                             response2 = requests.post(
                             f"{API_BASE_URL}",
                             headers=headers,
-                            timeout=5
+                            timeout=5,
+                            verify=False
                         )
                             
                             if create_response.status_code in [200, 201]:
