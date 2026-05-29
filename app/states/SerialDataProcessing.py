@@ -3,7 +3,7 @@ import time
 import sqlite3
 from app.core import SystemState
 from app.domain import EventType
-import request
+import requests
 
 STATE_TIMEOUT = 15              # back to IDLE
 ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')

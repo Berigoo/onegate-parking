@@ -6,7 +6,7 @@ import threading
 from typing import Callable
 from app.core import SessionQueue, Logger, DisplayManager
 from app.domain import StateEvent, EventType
-import request
+import requests
 
 _HOST = "0.0.0.0"
 _PORT = 8080
