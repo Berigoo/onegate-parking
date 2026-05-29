@@ -61,26 +61,26 @@ class SerialDataProcessing(SystemState):
                         # User not yet entered
                         elif response.status_code == 404:
 
-                            create_response = requests.post(
-                                f"{API_BASE_URL}",
-                                headers=headers,
-                                timeout=5,
-                                json={
-                                    "uid": uid
-                                },
-                                verify=False
-                            )
+                            # create_response = requests.post(
+                            #     f"{API_BASE_URL}",
+                            #     headers=headers,
+                            #     timeout=5,
+                            #     json={
+                            #         "uid": uid
+                            #     },
+                            #     verify=False
+                            # )
                             
-                            if create_response.status_code in [200, 201]:
-                                self.context.logger.debug(f"UID added: {uid}")
-                                self.context.set_state("AddingToQueue")
-                            else:
-                                self.context.logger.error(
-                                    f"Failed adding UID: "
-                                    f"{create_response.status_code} "
-                                    f"{create_response.text}"
-                                )
-                                self.context.set_state("Idle")
+                            # if create_response.status_code in [200, 201]:
+                            #     self.context.logger.debug(f"UID added: {uid}")
+                            self.context.set_state("AddingToQueue")
+                            # else:
+                            #     self.context.logger.error(
+                            #         f"Failed adding UID: "
+                            #         f"{create_response.status_code} "
+                            #         f"{create_response.text}"
+                            #     )
+                            #     self.context.set_state("Idle")
                         else:
                             self.context.logger.error(
                                 f"Unexpected API status: {response.status_code}"

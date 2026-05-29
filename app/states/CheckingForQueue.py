@@ -49,7 +49,7 @@ class CheckingForQueue(SystemState):
                     response.raise_for_status()
 
             except requests.RequestException as e:
-                print(f"API request failed: {e}")
+                self.context.logger.warn(f"API request failed: {e}")
 
             if self.context.sessions_queue.empty():
                 self.context.set_state("ClosingGate")
