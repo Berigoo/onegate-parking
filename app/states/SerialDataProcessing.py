@@ -57,6 +57,8 @@ class SerialDataProcessing(SystemState):
                         )
                         # User already entered
                         if response.status_code == 200:
+                            self.context.dm.set_text("Kartu sudah masuk")
+                            time.sleep(3)                            
                             self.context.set_state("Idle")
                         # User not yet entered
                         elif response.status_code == 404:
@@ -80,8 +82,6 @@ class SerialDataProcessing(SystemState):
                                     f"{create_response.status_code} "
                                     f"{create_response.text}"
                                 )
-                                self.context.dm.set_text("Kartu sudah masuk")
-                                time.sleep(3)
                                 self.context.set_state("Idle")
                         else:
                             self.context.logger.error(
