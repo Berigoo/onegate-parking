@@ -3,9 +3,20 @@ import time
 import sqlite3
 from app.core import SystemState
 from app.domain import EventType
+import request
 
 STATE_TIMEOUT = 15              # back to IDLE
 ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
+
+SERVER_IP = os.getenv("SERVER_IP", "127.0.0.1")
+SERVER_PORT = os.getenv("SERVER_PORT", "8000")
+API_BASE_URL = f"https://{SERVER_IP}:{SERVER_PORT}/api/active-entries"
+TOKEN = os.getenv("SERVER_TOKEN_ACCESS")
+
+headers = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Content-Type": "application/json"
+}
 
 class SerialDataProcessing(SystemState):
     def init(self):
@@ -36,11 +47,8 @@ class SerialDataProcessing(SystemState):
                 if self.context.current_event.payload["is_valid"]:
                     try:
                         response = requests.get(
-                            f"http://localhost:8000/api/active-entries/{uid}",
-                            headers={
-                                "Authorization": "Bearer 1|BROFIjULCvHGKq1pn1h7i0V4Z3D0CeCB2zc7qHRycca7c9bb",
-                                "Accept": "application/json"
-                            },
+                            f"{API_BASE_URL}/{uid}",
+                            headers=headers,
                             timeout=5
                         )
                         # User already entered
@@ -50,12 +58,8 @@ class SerialDataProcessing(SystemState):
                         elif response.status_code == 404:
 
                             response2 = requests.post(
-                            f"http://localhost:8000/api/active-entries",
-                            headers={
-                                "Authorization": "Bearer 1|BROFIjULCvHGKq1pn1h7i0V4Z3D0CeCB2zc7qHRycca7c9bb",
-                                "Accept": "application/json",
-                                "Content-Type": "application/json"
-                            },
+                            f"{API_BASE_URL}",
+                            headers=headers,
                             timeout=5
                         )
                             

@@ -5,8 +5,10 @@ from app.core import SystemState
 from app.domain import EventType, TextType
 import requests
 
-API_BASE_URL = "http://localhost:8000/api/active-entries"
-TOKEN = "1|BROFIjULCvHGKq1pn1h7i0V4Z3D0CeCB2zc7qHRycca7c9bb"
+SERVER_IP = os.getenv("SERVER_IP", "127.0.0.1")
+SERVER_PORT = os.getenv("SERVER_PORT", "8000")
+API_BASE_URL = f"https://{SERVER_IP}:{SERVER_PORT}/api/active-entries"
+TOKEN = os.getenv("SERVER_TOKEN_ACCESS")
 ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
 
 class CheckingForQueue(SystemState):

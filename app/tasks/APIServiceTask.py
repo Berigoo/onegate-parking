@@ -1,13 +1,20 @@
 import uuid
+import os
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit
 import threading
 from typing import Callable
 from app.core import SessionQueue, Logger, DisplayManager
 from app.domain import StateEvent, EventType
+import request
 
 _HOST = "0.0.0.0"
 _PORT = 8080
+
+SERVER_IP = os.getenv("SERVER_IP", "127.0.0.1")
+SERVER_PORT = os.getenv("SERVER_PORT", "8000")
+API_BASE_URL = f"https://{SERVER_IP}:{SERVER_PORT}/api/card"
+TOKEN = os.getenv("SERVER_TOKEN_ACCESS")
 
 class APIService:
     def __init__(self, queue_to_push: SessionQueue):
@@ -90,10 +97,7 @@ class APIService:
 
             response = requests.delete(
                 f"http://localhost:8000/api/active-entries/{entry_id}",
-                headers={
-                    "Authorization": "Bearer 1|BROFIjULCvHGKq1pn1h7i0V4Z3D0CeCB2zc7qHRycca7c9bb",
-                    "Accept": "application/json"
-                },
+                headers=headers,
                 timeout=5
             )
             

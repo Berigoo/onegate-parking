@@ -19,8 +19,10 @@ DB_CONF = {
     "database": "onegate_parkinng_dashboard"
 }
 
-API_BASE_URL = "http://localhost:8000/api/card"
-TOKEN = "1|BROFIjULCvHGKq1pn1h7i0V4Z3D0CeCB2zc7qHRycca7c9bb"
+SERVER_IP = os.getenv("SERVER_IP", "127.0.0.1")
+SERVER_PORT = os.getenv("SERVER_PORT", "8000")
+API_BASE_URL = f"https://{SERVER_IP}:{SERVER_PORT}/api/card"
+TOKEN = os.getenv("SERVER_TOKEN_ACCESS")
 
 headers = {
     "Authorization": f"Bearer {TOKEN}",
