@@ -5,6 +5,7 @@ import time
 import os
 from app.domain import StateEvent, EventType
 from app.core import SessionQueue, Logger
+import requests
 
 # Expected length of a card data payload (heuristic used by parser)
 CARD_DATA_LEN = 21
@@ -16,6 +17,14 @@ DB_CONF = {
     "user": "laravel",
     "password": "",
     "database": "onegate_parkinng_dashboard"
+}
+
+API_BASE_URL = "http://localhost:8000/api/card"
+TOKEN = "1|BROFIjULCvHGKq1pn1h7i0V4Z3D0CeCB2zc7qHRycca7c9bb"
+
+headers = {
+    "Authorization": f"Bearer {TOKEN}",
+    "Content-Type": "application/json"
 }
 
 class CardValidatorOut:
@@ -131,32 +140,29 @@ class CardValidatorOut:
             self.logger.debug(f"Parse error: {e}")
             return None
 
+
     def __validate(self, data):
         try:
-            conn = mariadb.connect(**self.db)
-            cursor = conn.cursor(dictionary=True)
-
-            # Check if uid or number exists
-            cursor.execute(
-                "SELECT * FROM user_cards WHERE uid = ?",
-                (data["number"],)
+            uid = data["uid"]
+        
+            response = requests.get(
+                f"{API_BASE_URL}/{uid}",
+                headers=headers
             )
-            result = cursor.fetchone()
-            print(result)
-            print(result["nama"])
-            print(data["number"])
-            is_valid = result is not None
-            conn.close()
 
-            if is_valid:
-                data["name"] = result["nama"] # name supplied when valid
-                self.logger.info(f"Card valid: uid={data['uid']}")
-            else:
-                self.logger.warning(f"Card not found: uid={data['uid']}")
+            if response.status_code == 404:
+                self.logger.warning(f"Card not found: uid={uid}")
+                return False
 
-            return is_valid
-        except Exception as e:
-            self.logger.error(f"Database error during validation: {e}")
+            response.raise_for_status()
+            result = response.json()
+            # name supplied when valid
+            data["name"] = result["nama"]
+            self.logger.info(f"Card valid: uid={uid}")
+            return True
+
+        except requests.RequestException as e:
+            self.logger.error(f"API error during validation: {e}")
             return False
         
     def __serial_connect(self, port):
