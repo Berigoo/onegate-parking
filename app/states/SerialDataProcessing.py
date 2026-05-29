@@ -73,7 +73,7 @@ class SerialDataProcessing(SystemState):
                             if create_response.status_code in [200, 201]:
                                 name = self.context.current_event.payload["name"]
                                 self.context.dm.set_text("Selamat Datang " + name)
-                                self.context.set_state("AddingToQueue") # AddingToQueue
+                                self.context.set_state("OpeningGate") # AddingToQueue
                             else:
                                 self.context.logger.error(
                                     f"Failed adding UID: "
@@ -116,7 +116,7 @@ class SerialDataProcessing(SystemState):
                         # do not care about "user already entered ?" info
                         name = self.context.current_event.payload["name"]
                         self.context.dm.set_text("Selamat Jalan " + name)
-                        self.context.set_state("AddingToQueue") # AddingToQueue
+                        self.context.set_state("OpeningGate") # AddingToQueue
                     except requests.RequestException as e:
                         self.context.logger.warn(f"API request failed: {e}")
                         self.context.set_state("Idle")
@@ -128,7 +128,7 @@ class SerialDataProcessing(SystemState):
             case EventType.INTERCOM_OVERRIDE:
                 self.context.timer_mgr.stop()
                 self.context.dm.set_text("Halo")
-                self.context.set_state("AddingToQueue") # AddingToQueue
+                self.context.set_state("OpeningGate") # AddingToQueue
             case EventType.GENERIC_TIMEOUT:
                 self.context.timer_mgr.stop()
                 self.context.set_state("Idle")
