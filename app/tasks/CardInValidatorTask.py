@@ -140,28 +140,28 @@ class CardValidatorIn:
             return None
 
     def __validate(self, data):
-    try:
-        uid = data["uid"]
+        try:
+            uid = data["uid"]
         
-        response = requests.get(
-            f"{API_BASE_URL}/{uid}",
-            headers=headers
-        )
+            response = requests.get(
+                f"{API_BASE_URL}/{uid}",
+                headers=headers
+            )
 
-        if response.status_code == 404:
-            self.logger.warning(f"Card not found: uid={uid}")
+            if response.status_code == 404:
+                self.logger.warning(f"Card not found: uid={uid}")
+                return False
+
+            response.raise_for_status()
+            result = response.json()
+            # name supplied when valid
+            data["name"] = result["nama"]
+            self.logger.info(f"Card valid: uid={uid}")
+            return True
+
+        except requests.RequestException as e:
+            self.logger.error(f"API error during validation: {e}")
             return False
-
-        response.raise_for_status()
-        result = response.json()
-        # name supplied when valid
-        data["name"] = result["nama"]
-        self.logger.info(f"Card valid: uid={uid}")
-        return True
-
-    except requests.RequestException as e:
-        self.logger.error(f"API error during validation: {e}")
-        return False
         
     def __serial_connect(self, port):
         retries = 5
