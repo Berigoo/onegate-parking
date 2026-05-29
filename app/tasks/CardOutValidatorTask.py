@@ -61,36 +61,86 @@ class CardValidatorOut:
     def __setup(self):
         # Attempt to connect to the serial device; keep self.serial in a valid state
         self.serial = self.__serial_connect(self.port)
+        
     def __loop(self):
-        if self.serial is None:
-            self.__serial_reconnect()
-        else:
+        try:
+            if self.serial is None:
+                self.__serial_reconnect()
+                return
+
             if self.serial.in_waiting > 0:
                 print('out')
+
                 event = StateEvent(
                     type=EventType.CARD_OUT_TAP,
                     payload=None
                 )
                 self.queue.put(event)
+
                 raw_data = self.__read_exact(FRAME_LEN)
-                try:
-                    if raw_data:
-                        data = self.__parse(raw_data)
+
+                if raw_data:
+                    data = self.__parse(raw_data)
+
+                    if data:
                         is_valid = self.__validate(data)
+
                         obj = {
                             "uid": data["uid"],
                             "number": data["number"],
                             "is_valid": is_valid,
                         }
+
                         if is_valid:
                             obj["name"] = data["name"]
-                        event = StateEvent(
-                            type=EventType.CARD_OUT_VALID,
-                            payload=obj
-                        )
-                        self.queue.put(event)
-                except Exception as e:
-                    self.logger.warning("Kartu tidak valid atau sistem gagal")
+
+                            event = StateEvent(
+                                type=EventType.CARD_OUT_VALID,
+                                payload=obj
+                            )
+
+                            self.queue.put(event)
+
+        except (serial.SerialException, OSError) as e:
+            self.logger.warning(f"Serial disconnected: {e}")
+
+            try:
+                self.serial.close()
+            except:
+                pass
+
+            self.serial = None        
+    # def __loop(self):
+    #     try:
+    #     if self.serial is None:
+    #         self.__serial_reconnect()
+    #     else:
+    #         if self.serial.in_waiting > 0:
+    #             print('out')
+    #             event = StateEvent(
+    #                 type=EventType.CARD_OUT_TAP,
+    #                 payload=None
+    #             )
+    #             self.queue.put(event)
+    #             raw_data = self.__read_exact(FRAME_LEN)
+    #             try:
+    #                 if raw_data:
+    #                     data = self.__parse(raw_data)
+    #                     is_valid = self.__validate(data)
+    #                     obj = {
+    #                         "uid": data["uid"],
+    #                         "number": data["number"],
+    #                         "is_valid": is_valid,
+    #                     }
+    #                     if is_valid:
+    #                         obj["name"] = data["name"]
+    #                     event = StateEvent(
+    #                         type=EventType.CARD_OUT_VALID,
+    #                         payload=obj
+    #                     )
+    #                     self.queue.put(event)
+    #             except Exception as e:
+    #                 self.logger.warning("Kartu tidak valid atau sistem gagal")
 
     
     def __read_exact(self, size):
