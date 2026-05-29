@@ -46,6 +46,7 @@ class SerialDataProcessing(SystemState):
                 self.context.timer_mgr.stop()
                 if self.context.current_event.payload["is_valid"]:
                     try:
+                        uid = self.context.current_event.payload["number"]
                         response = requests.get(
                             f"{API_BASE_URL}/{uid}",
                             headers=headers,
