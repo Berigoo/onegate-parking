@@ -60,7 +60,6 @@ class SerialDataProcessing(SystemState):
                             self.context.set_state("Idle")
                         # User not yet entered
                         elif response.status_code == 404:
-                            self.context.logger.info("creating data")
                             create_response = requests.post(
                                 f"{API_BASE_URL}",
                                 headers=headers,
@@ -72,14 +71,17 @@ class SerialDataProcessing(SystemState):
                             )
                             
                             if create_response.status_code in [200, 201]:
-                                self.context.logger.debug(f"UID added: {uid}")
-                                self.context.set_state("AddingToQueue")
+                                name = self.context.current_event.payload["name"]
+                                self.context.dm.set_text("Selamat Datang " + name)
+                                self.context.set_state("OpeningGate") # AddingToQueue
                             else:
                                 self.context.logger.error(
                                     f"Failed adding UID: "
                                     f"{create_response.status_code} "
                                     f"{create_response.text}"
                                 )
+                                self.context.dm.set_text("Kartu sudah masuk")
+                                time.sleep(3)
                                 self.context.set_state("Idle")
                         else:
                             self.context.logger.error(
@@ -104,7 +106,6 @@ class SerialDataProcessing(SystemState):
                 self.context.timer_mgr.stop()
                 if self.context.current_event.payload["is_valid"]:
                     try:
-                        self.context.logger.info("deleting data")
                         uid = self.context.current_event.payload["number"]
                         response = requests.delete(
                             f"{API_BASE_URL}/{uid}",
@@ -113,7 +114,9 @@ class SerialDataProcessing(SystemState):
                         )
                         response.raise_for_status()
                         # do not care about "user already entered ?" info
-                        self.context.set_state("AddingToQueue")
+                        name = self.context.current_event.payload["name"]
+                        self.context.dm.set_text("Selamat Jalan " + name)
+                        self.context.set_state("OpeningGate") # AddingToQueue
                     except requests.RequestException as e:
                         self.context.logger.warn(f"API request failed: {e}")
                         self.context.set_state("Idle")
@@ -124,7 +127,8 @@ class SerialDataProcessing(SystemState):
                     self.context.set_state("Idle")
             case EventType.INTERCOM_OVERRIDE:
                 self.context.timer_mgr.stop()
-                self.context.set_state("AddingToQueue")
+                self.context.dm.set_text("Halo")
+                self.context.set_state("OpeningGate") # AddingToQueue
             case EventType.GENERIC_TIMEOUT:
                 self.context.timer_mgr.stop()
                 self.context.set_state("Idle")
