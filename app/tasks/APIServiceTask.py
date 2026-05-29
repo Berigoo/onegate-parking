@@ -84,7 +84,7 @@ class APIService:
             obj = {
                 "uid": data["uid"],
                 "number": data["uid"],
-                "name": data["name"]
+                "name": data["name"],
                 "is_valid": True,
             }
             event = StateEvent(
