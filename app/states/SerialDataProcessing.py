@@ -105,6 +105,7 @@ class SerialDataProcessing(SystemState):
                 if self.context.current_event.payload["is_valid"]:
                     try:
                         self.context.logger.info("deleting data")
+                        uid = self.context.current_event.payload["number"]
                         response = requests.delete(
                             f"{API_BASE_URL}/{uid}",
                             headers=headers,
