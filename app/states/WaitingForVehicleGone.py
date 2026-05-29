@@ -2,7 +2,7 @@ from app.core import SystemState
 from app.domain import EventType
 from app.states import Idle, ClosingGate
 
-STATE_TIMEOUT = 60              # back to IDLE
+STATE_TIMEOUT = 30              # back to IDLE
 
 class WaitingForVehicleGone(SystemState):
     def init(self):
