@@ -67,23 +67,23 @@ class SerialDataProcessing(SystemState):
                         )
                             
                             if create_response.status_code in [200, 201]:
-                                self.logger.debug(f"UID added: {uid}")
+                                self.context.logger.debug(f"UID added: {uid}")
                                 self.context.set_state("AddingToQueue")
                             else:
-                                self.logger.error(
+                                self.context.logger.error(
                                     f"Failed adding UID: "
                                     f"{create_response.status_code} "
                                     f"{create_response.text}"
                                 )
                                 self.context.set_state("Idle")
                         else:
-                            self.logger.error(
+                            self.context.logger.error(
                                 f"Unexpected API status: {response.status_code}"
                             )
                             self.context.set_state("Idle")
 
                     except requests.RequestException as e:
-                        self.logger.error(f"Laravel API request failed: {e}")
+                        self.context.logger.error(f"Laravel API request failed: {e}")
                         self.context.set_state("Idle")
                         
                 else:
