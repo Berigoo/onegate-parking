@@ -14,6 +14,7 @@ ENTERED_USERS_DB = os.getenv('ENTERED_USERS_DB')
 class CheckingForQueue(SystemState):
     def init(self):
         ev = self.context.sessions_queue.get() # guarantee CARD_IN_VALID or CARD_OUT_VALID or INTERCOM_OVERRIDE. tmp: CARD_OUT_TAP
+        self.context.logger(f"cchecking for e: {ev}")
         if ev.type is EventType.INTERCOM_OVERRIDE: # pass special access
             pass
         # elif ev.type is EventType.CARD_OUT_TAP:
@@ -29,6 +30,7 @@ class CheckingForQueue(SystemState):
             try:
                 if ev.type is EventType.CARD_IN_VALID:
                     # INSERT
+                    self.context.logger("inserting data")
                     response = requests.post(
                         API_BASE_URL,
                         json={
@@ -40,6 +42,7 @@ class CheckingForQueue(SystemState):
 
                 else:
                     # DELETE
+                    self.context.logger("deleting data")
                     response = requests.delete(
                         f"{API_BASE_URL}/{uid}",
                         headers=headers,
