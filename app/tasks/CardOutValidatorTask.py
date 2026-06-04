@@ -109,7 +109,9 @@ class CardValidatorOut:
             except:
                 pass
 
-            self.serial = None        
+            self.serial = None
+
+            time.sleep(1)
     # def __loop(self):
     #     try:
     #     if self.serial is None:
