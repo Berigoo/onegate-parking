@@ -17,7 +17,7 @@ class WaitingForEmoneyTap(SystemState):
                 self.context.set_state("SerialDataProcessing")
             case EventType.INTERCOM_OVERRIDE:
                 self.context.timer_mgr.stop()
-                self.context.set_state("AddingToQueue")
+                self.context.set_state("OpeningGate")
             case EventType.GENERIC_TIMEOUT:
                 self.context.set_state("Idle")
             

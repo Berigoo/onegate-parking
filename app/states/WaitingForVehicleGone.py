@@ -21,10 +21,9 @@ class WaitingForVehicleGone(SystemState):
             case EventType.VEHICLE_GONE:
                 if not self.next_low_signal:
                     self.context.timer_mgr.stop()
-                    print('checking for queue')
                     self.context.set_state("ClosingGate") # Checking For Queue
-            case EventType.CARD_IN_TAP | EventType.CARD_OUT_TAP:
-                self.context.set_state("SerialDataProcessing")
+            # case EventType.CARD_IN_TAP | EventType.CARD_OUT_TAP:
+            #     self.context.set_state("SerialDataProcessing")
             case EventType.GENERIC_TIMEOUT:
                 self.context.set_state("ClosingGate")
             

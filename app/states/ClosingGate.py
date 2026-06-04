@@ -18,7 +18,7 @@ class ClosingGate(SystemState): # sessions queue is empty, guaranteed
                 self.context.set_state("HoldingGate")
             case EventType.INTERCOM_OVERRIDE:
                 self.context.timer_mgr.stop()
-                self.context.set_state("AddingToQueue")
+                self.context.set_state("OpeningGate")
             case EventType.GENERIC_TIMEOUT: # TODO proper close detection
                 self.context.set_state("Idle")
             
