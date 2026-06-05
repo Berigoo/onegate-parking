@@ -25,6 +25,7 @@ class WaitingForVehicleGone(SystemState):
             # case EventType.CARD_IN_TAP | EventType.CARD_OUT_TAP:
             #     self.context.set_state("SerialDataProcessing")
             case EventType.GENERIC_TIMEOUT:
+                self.context.timer_mgr.stop()
                 self.context.set_state("ClosingGate")
             
         
