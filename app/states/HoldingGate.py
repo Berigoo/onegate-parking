@@ -1,7 +1,7 @@
 from app.core import SystemState
 from app.domain import EventType
 
-STATE_TIMEOUT = 30
+STATE_TIMEOUT = 60
 
 class HoldingGate(SystemState):
     def init(self):
